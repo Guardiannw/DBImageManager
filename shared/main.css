@@ -1,0 +1,50 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Oct 21, 2013, 12:14:32 AM
+    Author     : nrwebb
+*/
+
+body{
+    background-color: bisque;
+    color: #000000;
+}
+
+#mainMenu{
+    text-align: center;
+    display:block;
+    margin:auto;
+}
+
+a{
+    text-decoration: none;
+    color: #000000;
+}
+
+.floatleft
+{
+    float: left;
+}
+
+.floatright
+{
+    float: right;
+}
+
+.alignright
+{
+    text-align: right;
+}
+
+.alignleft
+{
+    text-align: left;
+}
+
+.inlineblock
+{
+    display: inline-block;
+}
