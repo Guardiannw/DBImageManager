@@ -12,6 +12,8 @@
  * @author nrwebb
  */
 abstract class DBO {
+    //all static variables
+    public static $MYSQLDATE = 'Y-m-d H:i:s';
     /*
      * Place Class Variables at the top of the class.
      * 1 for each variable name where it equals the SQL

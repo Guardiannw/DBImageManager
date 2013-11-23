@@ -244,4 +244,44 @@ function mergeClientImageData($clientCSV, $imageCSV, $makecsv = false, $containH
     return $returnArray;
     
 }
+
+/**
+ * Takes in a time and format string and converts it to specified format
+ * @param date or time $time
+ * @param DateTimeFormat $formatString
+ * @return formattedTime
+ */
+function formatTime($time, $formatString)
+{
+    $timestamp = strtotime($time);
+    return date($formatString, $timestamp);
+}
+
+/**
+ * Changes the format of the date and times within input array to the 
+ * specified format string.
+ * 
+ * Returns false on failure, returns true otherwise;
+ * 
+ * @param timearray &$array
+ * @param columnsToFormat $colKeys
+ * @param DateTimeFormat $formatString
+ */
+function formatTimeArray(&$array,$colKeys, $formatString)
+{
+    try{
+        foreach($colKeys as $key)
+        {
+            foreach($array as &$row)
+            {
+                $row[$key] = formatTime($row[$key], $formatString);
+            }
+        }
+    }
+    catch(Exception $e)
+    {
+        return False;
+    }
+    return True;
+}
 ?>

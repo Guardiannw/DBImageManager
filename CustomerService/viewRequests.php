@@ -8,20 +8,24 @@ global $requests, $headers;
 ?>
 
 <table id="viewRequests">
-    
-    <!-- This is the header row -->
-    <tr>
-        <?php foreach($headers as $col): ?>
-        <td>
-            <?php echo $col; ?>
-        </td>
-        <?php endforeach;?>
-    </tr>
-    
-    <!-- All other rows are actual entries -->
-    <?php foreach($requests as $rows): ?>
-    <tr>
-        
-    </tr>
-    <?php endforeach; ?>
+    <thead id="head">
+        <tr>
+            <?php foreach($headers as $col): ?>
+            <th>
+                <?php echo $col; ?>
+            </th>
+            <?php endforeach;?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach($requests as $row): ?>
+        <tr>
+            <?php foreach($row as $cols): ?>
+            <td>
+                <?php echo $cols; ?>
+            </td>
+            <?php endforeach; ?>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
 </table>

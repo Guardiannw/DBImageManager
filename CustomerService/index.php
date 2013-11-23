@@ -28,25 +28,19 @@ else
     $action = null;
 }
 
-//This is the View part of ModelViewController
-//figure out where to redirect the page
-
-
-//include the header
-include_once('../shared/header.php'); //draw the header for all pages
-
+//configure all variables and calculations before locating to the page
 switch($action)
 {
     case 'viewRequests':
         //get all of the service requests in the database
         $requests = $databaseManager->getAllServiceRequests();
         $headers = $databaseManager->getTableHeaders(ServiceRequest::$table);
-        include_once('viewRequests.php');
+        //format the time for the requests
+        formatTimeArray($requests, array(ServiceRequest::$creationdate), "F d, Y");
         break;
     case 'createRequest':
         //get the names and id's for the Schools
         $schoolNames = $databaseManager->getAllSchoolNames();
-        include_once('CreateRequest.php'); //draw the main menu
         break;
     case 'submitRequest':
         //initialize the service request
@@ -67,6 +61,24 @@ switch($action)
         
         //submit the requst
         $databaseManager->addServiceRequest($serviceRequest);
+        //redirect to the view screen
+        header('Location: ?action=viewRequests');
+        break;
+    default:
+        //nothing
+    }
+//This is the View part of ModelViewController
+//figure out where to redirect the page
+//include the header
+include_once('../shared/header.php'); //draw the header for all pages
+
+switch($action)
+{
+    case 'viewRequests':
+        include_once('viewRequests.php');
+        break;
+    case 'createRequest':
+        include_once('CreateRequest.php'); //draw the main menu
         break;
     default://if the action has not been selected, then simply draw the main menu
         include_once('menu.php'); //draw the main menu

@@ -54,12 +54,7 @@ class ServiceRequest extends DBO{
         $this->aid = $aID;
         $this->percent = 0;
         $this->notes = $notes;
-        //define a simple time variable
-        $time = new DateTime();
-        //assign the time
-        $this->creationdate = $time->getTimestamp();
-        //remove the variable
-        unset($time);
+        $this->creationdate = date(parent::$MYSQLDATE);
     }
     
     /**

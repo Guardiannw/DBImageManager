@@ -43,7 +43,7 @@ class ImageManagerDBM extends DBM
     
     /**
      * Returns all service requests from the database in the form of 
-     * an indexed array of service request objects.
+     * an indexed array of associative array service requests.
      */
     public function getAllServiceRequests()
     {
@@ -54,7 +54,7 @@ class ImageManagerDBM extends DBM
         //make them into objects and put them in an ID based array
         foreach($input as $value)
         {
-            $output[$value[ServiceRequest::$id]] = ServiceRequest::fromArray($value);
+            $output[$value[ServiceRequest::$id]] = $value;
         }
         
         return $output;

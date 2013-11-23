@@ -15,13 +15,36 @@ body{
 
 #mainMenu{
     text-align: center;
-    display:block;
     margin:auto;
 }
 
 a{
     text-decoration: none;
     color: #000000;
+}
+table#viewRequests
+{
+    border-collapse: collapse;
+}
+table#viewRequests td
+{
+    border: 2px black solid;
+    padding: 5px;
+    width: auto;
+    height: auto;
+}
+
+
+thead
+{
+    border: 2px black solid;
+    text-align: center;
+    color: #000000;
+}
+thead th
+{
+    border: 2px black solid;
+    padding: 5px;
 }
 
 .floatleft
