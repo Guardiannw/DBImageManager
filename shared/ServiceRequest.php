@@ -1,5 +1,5 @@
 <?php
-require_once('../shared/DBO.php');
+require_once('DBO.php');
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -33,8 +33,9 @@ class ServiceRequest extends DBO{
     public static $aid = 'AssigneeID';
     public static $percent = 'PercentComplete';
     public static $notes = 'Notes';
+    public static $creationdate = 'CreationDate';
     
-    public function __construct($rID, $cName, $cEmail, $cPhone, $clientID, $schoolID, $oType, $cType, $issue, $aID, $notes)
+    public function __construct($rID, $cName, $cEmail, $cPhone, $clientname, $schoolID, $oType, $cType, $issue, $aID, $notes)
     {
         //call parent constructor first!!!
         parent::__construct();
@@ -53,5 +54,38 @@ class ServiceRequest extends DBO{
         $this->aid = $aID;
         $this->percent = 0;
         $this->notes = $notes;
+        //define a simple time variable
+        $time = new DateTime();
+        //assign the time
+        $this->creationdate = $time->getTimestamp();
+        //remove the variable
+        unset($time);
+    }
+    
+    /**
+     * Takes the database array and returns a service request object from it.
+     * @param {Assoc Array} $array
+     */
+    public static function fromArray($array)
+    {
+        $temp = new ServiceRequest($array[self::$aid], 
+                                   $array[self::$cname],
+                                   $array[self::$cemail],
+                                   $array[self::$cphone],
+                                   $array[self::$clientname],
+                                   $array[self::$schoolid],
+                                   $array[self::$otype],
+                                   $array[self::$ctype],
+                                   $array[self::$issue],
+                                   $array[self::$aid],
+                                   $array[self::$notes]);
+        
+        //set up the non-constructor variables
+        $temp->id = $array[self::$id];
+        $temp->percent = $array[self::$percent];
+        $temp->status = $array[self::$status];
+        $temp->creationdate = $array[self::$creationdate];
+        
+        return $temp;
     }
 }

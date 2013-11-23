@@ -11,7 +11,7 @@ require_once('../shared/functions.php');
 
 
 //include the necessary classes
-require_once('ServiceRequest.php');
+require_once('../shared/ServiceRequest.php');
 require_once('../shared/Client.php');
 require_once('../shared/School.php');
 
@@ -38,6 +38,9 @@ include_once('../shared/header.php'); //draw the header for all pages
 switch($action)
 {
     case 'viewRequests':
+        //get all of the service requests in the database
+        $requests = $databaseManager->getAllServiceRequests();
+        $headers = $databaseManager->getTableHeaders(ServiceRequest::$table);
         include_once('viewRequests.php');
         break;
     case 'createRequest':

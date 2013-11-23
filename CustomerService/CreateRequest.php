@@ -47,7 +47,7 @@ global $schoolNames; //passed in from index
             <input type='tel' id='ContactPhone' name='ContactPhone'/>
             <input type='text' id='ContactEmail' name='ContactEmail'/>
             
-            <input type="text" id="ClientName" name="ClientName"    
+            <input type="text" id="ClientName" name="ClientName"> 
             
             <select id='SchoolID' name='SchoolID'>
             <?php foreach($schoolNames as $id => $name): ?>

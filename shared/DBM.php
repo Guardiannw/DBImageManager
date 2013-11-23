@@ -109,7 +109,7 @@ class DBM {
      */
     public function getTableHeaders($table)
     {
-        $query = $this->DBO->query("SELECT * FROM $table");
+        $query = $this->DBO->query("SELECT * FROM $table LIMIT 0,1");//only return 1 row to optomize it
         $fields = mysqli_fetch_fields($query);
         $results = array();
         foreach($fields as $field)

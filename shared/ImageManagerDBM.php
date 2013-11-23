@@ -1,6 +1,7 @@
 <?php
 require_once('DBM.php');
 require_once('Client.php');
+require_once('ServiceRequest.php');
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -38,6 +39,25 @@ class ImageManagerDBM extends DBM
     public function addServiceRequest($serviceRequest)
     {
         $this->insertIntoTable('ServiceRequests', $serviceRequest->getVariables());
+    }
+    
+    /**
+     * Returns all service requests from the database in the form of 
+     * an indexed array of service request objects.
+     */
+    public function getAllServiceRequests()
+    {
+        //read in all the rows
+        $input = $this->getTableRows(ServiceRequest::$table);
+        $output = array();
+        
+        //make them into objects and put them in an ID based array
+        foreach($input as $value)
+        {
+            $output[$value[ServiceRequest::$id]] = ServiceRequest::fromArray($value);
+        }
+        
+        return $output;
     }
     
     /**
