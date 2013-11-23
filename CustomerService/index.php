@@ -41,8 +41,7 @@ switch($action)
         include_once('viewRequests.php');
         break;
     case 'createRequest':
-        //get the names and id's for the clients and schools
-        $clientNames = $databaseManager->getAllClientNames(Client::$kGETFULLNAME);
+        //get the names and id's for the Schools
         $schoolNames = $databaseManager->getAllSchoolNames();
         include_once('CreateRequest.php'); //draw the main menu
         break;
@@ -55,7 +54,7 @@ switch($action)
                         $sr['ContactName'], 
                         $sr['ContactEmail'], 
                         $sr['ContactPhone'], 
-                        $sr['ClientID'], 
+                        $sr['ClientName'], 
                         $sr['SchoolID'], 
                         $sr['OrderType'], 
                         $sr['ContactType'], 

@@ -25,7 +25,7 @@ class ServiceRequest extends DBO{
     public static $cname = 'ContactName';
     public static $cemail = 'ContactEmail';
     public static $cphone = 'ContactPhone';
-    public static $clientid = 'ClientID';
+    public static $clientname = 'ClientName';
     public static $schoolid = 'SchoolID';
     public static $otype = 'OrderType';
     public static $ctype = 'ContactType';
@@ -45,7 +45,7 @@ class ServiceRequest extends DBO{
         $this->cname = $cName;
         $this->cemail = $cEmail;
         $this->cphone = $cPhone;
-        $this->clientid = $clientID;
+        $this->clientname = $clientname;
         $this->schoolid = $schoolID;
         $this->otype = $oType;
         $this->ctype = $cType;

@@ -2,7 +2,7 @@
 /*
  * PHP Pre-Process Information
  */
-global $clientNames, $schoolNames; //passed in from index
+global $schoolNames; //passed in from index
 ?>
 
 <div id="header">
@@ -47,13 +47,7 @@ global $clientNames, $schoolNames; //passed in from index
             <input type='tel' id='ContactPhone' name='ContactPhone'/>
             <input type='text' id='ContactEmail' name='ContactEmail'/>
             
-            <select id='ClientID' name='ClientID'>
-            <?php foreach($clientNames as $id => $name): ?>
-                <option value="<?php echo $id; ?>">
-                    <?php echo implode(" ", $name); ?>
-                </option>
-            <?php endforeach; ?>
-            </select>    
+            <input type="text" id="ClientName" name="ClientName"    
             
             <select id='SchoolID' name='SchoolID'>
             <?php foreach($schoolNames as $id => $name): ?>
