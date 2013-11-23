@@ -61,6 +61,20 @@ class ImageManagerDBM extends DBM
     }
     
     /**
+     * Returns an associative array of a service request 
+     * given a specific id.
+     * @param int $id
+     */
+    public function getServiceRequestWithID($id)
+    {
+        $constraints = array();
+        $constraints[ServiceRequest::$id] = $id;
+        $return = $this->getColumnsFromTableWithValues($constraints, self::ALLCOLUMNS, ServiceRequest::$table);
+        //only returning 1 so just return the first element in the array of size 1
+        return $return[0];
+    }
+    
+    /**
      * Returns an array of arrays where the 
      * clientID is the key of the first array
      * and the sql headers are the keys to the rest.

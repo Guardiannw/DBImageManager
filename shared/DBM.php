@@ -12,6 +12,10 @@
  * @author nrwebb
  */
 class DBM {
+    
+    //constants
+    const ALLCOLUMNS = 1;
+    
     //put your code here
     protected $MYSQLIDATABASE;
     private $MYSQLIHOST;
@@ -123,12 +127,17 @@ class DBM {
     /**
      * Name: getColumnsFromTable
      * Params:
-     * $columns = names of columns to retreive from table
+     * $columns = names of columns to retreive from table (ALLCOLUMNS will return all columns)
      * $table = string containing the table name
      * Returns: An numerical/associative array of the Table rows where the ID is the key.
      */
     public function getColumnsFromTable($columns, $table)
     {
+        //check for constants
+        if($columns === self::ALLCOLUMNS)
+        {
+            $columns = $this->getTableHeaders($table);
+        }
         $query = $this->DBO->query("SELECT ".implode(',',$columns)." FROM $table");
         $results = array();
         $resultRow = mysqli_fetch_array($query, MYSQLI_ASSOC);
@@ -146,9 +155,9 @@ class DBM {
      * Name: getColumnsFromTableWithValues
      * Params:
      * $constraints = associative array where the key is the column name and the value is the constraint
-     * $columns = array of desired columns
+     * $columns = array of desired columns (ALLCOLUMNS will return all columns)
      * $table = string containing the table name
-     * Returns: An numerical/associative array of the Table rows.
+     * Returns: An numerical array of the associative Table row arrays.
      */
     public function getColumnsFromTableWithValues($constraints, $columns, $table)
     {
@@ -156,6 +165,11 @@ class DBM {
         foreach($constraints as $key=>$value)
         {
             array_push($statements, "$key = $value");
+        }
+        //check for constants
+        if($columns === self::ALLCOLUMNS)
+        {
+            $columns = $this->getTableHeaders($table);
         }
         $query = $this->DBO->query("SELECT ".implode(',',$columns)." FROM $table WHERE ".implode(' AND ', $statements));
         $results = array();

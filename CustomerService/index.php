@@ -62,7 +62,18 @@ switch($action)
         //submit the requst
         $databaseManager->addServiceRequest($serviceRequest);
         //redirect to the view screen
-        header('Location: ?action=viewRequests');
+        header('Location:.?action=viewRequests');
+        break;
+    case 'editRequest':
+        //get the id from the url
+        $id = $_GET['id'];
+        $request = $databaseManager->getServiceRequestWithID($id);
+        //unset the id
+        unset($id);
+        //get the names and id's for the Schools
+        $schoolNames = $databaseManager->getAllSchoolNames();
+        break;
+    case 'updateRequest':
         break;
     default:
         //nothing
@@ -79,6 +90,9 @@ switch($action)
         break;
     case 'createRequest':
         include_once('CreateRequest.php'); //draw the main menu
+        break;
+    case 'editRequest':
+        include_once('editRequest.php'); //draw the edit menu
         break;
     default://if the action has not been selected, then simply draw the main menu
         include_once('menu.php'); //draw the main menu
