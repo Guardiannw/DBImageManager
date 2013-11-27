@@ -44,6 +44,17 @@ abstract class DBO {
     }
     
     /**
+     * Gets the associative array value as if it was an object variable.
+     * @param {string} $name
+     */
+    public function __get($name)
+    {
+       //get variable name
+       $key = static::$$name;
+       return $this->variables[$key];
+    }
+    
+    /**
      * Returns the variables array.
      * @return {Assoc. Array}
      */

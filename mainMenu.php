@@ -2,7 +2,7 @@
     <tr>
         <td>
             <button>
-                <a href="?window=ImageManager">
+                <a href="?action=ImageManager">
                 Image Manager
                 </a>
             </button>
@@ -11,7 +11,7 @@
     <tr>
         <td>
             <button>
-                <a href="?window=CustomerService">
+                <a href="?action=CustomerService">
                     Customer Service
                 </a>
             </button>

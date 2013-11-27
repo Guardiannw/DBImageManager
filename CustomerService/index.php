@@ -15,6 +15,10 @@ require_once('../shared/ServiceRequest.php');
 require_once('../shared/Client.php');
 require_once('../shared/School.php');
 
+
+session_start(); //must be called before any html is sent on every page that needs it
+
+
 //outside variables
 global $databaseManager;
 
@@ -34,7 +38,6 @@ switch($action)
     case 'viewRequests':
         //get all of the service requests in the database
         $requests = $databaseManager->getAllServiceRequests();
-        $headers = $databaseManager->getTableHeaders(ServiceRequest::$table);
         //get the names and id's for the Schools
         $schoolNames = $databaseManager->getAllSchoolNames();
         break;
@@ -62,7 +65,7 @@ switch($action)
         //submit the requst
         $databaseManager->addServiceRequest($serviceRequest);
         //redirect to the view screen
-        header('Location:.?action=viewRequests');
+        header('Location: ?action=viewRequests');
         break;
     case 'editRequest':
         //get the id from the url
@@ -95,7 +98,7 @@ switch($action)
         //update the request
         $databaseManager->updateServiceRequest($serviceRequest);
         //redirect to the view screen
-        header('Location:.?action=viewRequests');
+        header('Location: ?action=viewRequests');
         break;
     default:
         //nothing

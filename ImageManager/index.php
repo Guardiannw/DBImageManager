@@ -9,6 +9,11 @@ require_once('connect.php');
 //include the functions file for all of the functions of the program
 require_once('../shared/functions.php');
 
+
+session_start(); //must be called before any html is sent on every page that needs it
+
+
+
 //figure out where to redirect the page
 if(isset($_GET['window']))
 {

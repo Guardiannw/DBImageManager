@@ -138,6 +138,8 @@ class DBM {
         {
             $columns = $this->getTableHeaders($table);
         }
+        
+        //execute query
         $query = $this->DBO->query("SELECT ".implode(',',$columns)." FROM $table");
         $results = array();
         $resultRow = mysqli_fetch_array($query, MYSQLI_ASSOC);
@@ -160,18 +162,36 @@ class DBM {
      * Returns: An numerical array of the associative Table row arrays.
      */
     public function getColumnsFromTableWithValues($constraints, $columns, $table)
-    {
+    {//prep the input for different data types
+        foreach($constraints as $key=>$value)
+        {
+            
+            //if any values are null, then remove them
+            if(!isset($value))
+            {
+                unset($constraints[$key]);
+            }else if(is_string($value))
+            {
+                //prep all strings with a quote
+                $constraints[$key] = "'$value'";
+            }
+            
+        }
+        //create the individual constraint statements
         $statements = array();
         foreach($constraints as $key=>$value)
         {
             array_push($statements, "$key = $value");
         }
+        
         //check for constants
         if($columns === self::ALLCOLUMNS)
         {
             $columns = $this->getTableHeaders($table);
         }
-        $query = $this->DBO->query("SELECT ".implode(',',$columns)." FROM $table WHERE ".implode(' AND ', $statements));
+        //execute query
+        $formulatedQuery = "SELECT ".implode(',',$columns)." FROM $table WHERE ".implode(' AND ', $statements);
+        $query = $this->DBO->query($formulatedQuery);
         $results = array();
         $resultRow = mysqli_fetch_array($query, MYSQLI_ASSOC);
         while(isset($resultRow))
@@ -197,19 +217,19 @@ class DBM {
         $columnString = implode(", ", array_keys($list));
         
         //prep the input for different data types
-        foreach($list as &$value)
+        foreach($list as $key=>$value)
         {
             
             //if any values are null, the explicity declare them as string 'NULL'
             if(!isset($value))
             {
-                $value = 'NULL';
+                $list[$key]= 'NULL';
             }
             
             //prep all strings with single quotes
             if(is_string($value))
             {
-                $value = "'$value'";
+                $list[$key] = "'$value'";
             }
             
         }

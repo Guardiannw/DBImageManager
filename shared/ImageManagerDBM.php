@@ -2,6 +2,7 @@
 require_once('DBM.php');
 require_once('Client.php');
 require_once('ServiceRequest.php');
+require_once('User.php');
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -157,5 +158,21 @@ class ImageManagerDBM extends DBM
         $return = $this->getColumnsFromTableWithValues($constraints, self::ALLCOLUMNS, School::$table);
         //only returning 1 so just return the first element in the array of size 1
         return $return[0];
+    }
+    
+    /**
+     * Returns an associative User array given a specified email address
+     * and password.  Throws an exception if incorrect email and password combination.
+     * @param String $email
+     * @param String $password
+     * @return Assoc Array User
+     */
+    public function getUserFromLogin($email, $password)
+    {
+            $constraints = array();
+            $constraints[User::$email] = $email;
+            $constraints[User::$password] = sha1($password); //use sha1 password conversion
+            $user = $this->getColumnsFromTableWithValues($constraints, self::ALLCOLUMNS, User::$table);
+            return $user[0];
     }
 }

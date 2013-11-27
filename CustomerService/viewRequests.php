@@ -3,22 +3,26 @@
 /*
  * PHP Pre-Process Information
  */
-global $requests, $headers, $schoolNames;
+global $requests, $schoolNames;
 
 //format the time for the requests
 formatTimeArray($requests, array(ServiceRequest::$creationdate), "F d, Y");
 
 //format the SchoolID's with the school names
-foreach($requests as &$request)
+foreach($requests as $key=>$request)
 {
     //create a simple link to the schoolid
-    $sid = &$request[ServiceRequest::$schoolid];
+    $sid = $request[ServiceRequest::$schoolid];
     
-    //assign it to the appropriate field
-    $sid = $schoolNames[(int)$sid];
+    //assign the school name to the schoolid field
+    $requests[$key][ServiceRequest::$schoolid] = $schoolNames[(int)$sid];
     
-    //get the name variable
+    //take out the Notes section
+    unset($requests[$key][ServiceRequest::$notes]);
 }
+
+//get the headers from first element of array.
+$headers = array_keys(current($requests));
 ?>
 
 <table id="viewRequests">
