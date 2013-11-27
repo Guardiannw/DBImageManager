@@ -38,7 +38,16 @@ class ImageManagerDBM extends DBM
      */
     public function addServiceRequest($serviceRequest)
     {
-        $this->insertIntoTable('ServiceRequests', $serviceRequest->getVariables());
+        $this->insertIntoTable(ServiceRequest::$table, $serviceRequest->getVariables());
+    }
+    
+    /**
+     * Adds a service request object to the database.
+     * @param {ServiceRequest} $serviceRequest
+     */
+    public function updateServiceRequest($serviceRequest)
+    {
+        $this->updateTableRowWithID(ServiceRequest::$table, $serviceRequest->getVariables());
     }
     
     /**
@@ -116,7 +125,7 @@ class ImageManagerDBM extends DBM
     /**
      * Returns an array of arrays where the 
      * SchoolID is the key of the first array
-     * and the sql headers are the keys to the rest.
+     * and the value is the name.
      */
     public function getAllSchoolNames()
     {
@@ -130,9 +139,23 @@ class ImageManagerDBM extends DBM
         {
             $id = $value[School::$id]; //get the id
             unset($value[School::$id]);// remove it from the array
-            $return[$id] = $value; //set it as the key of the new array
+            $return[$id] = $value[School::$name]; //set it as the key of the new array
         }
         
         return $return;
+    }
+    
+    /**
+     * Returns an associative array of a School
+     * given a specific id.
+     * @param int $id
+     */
+    public function getSchoolWithID($id)
+    {
+        $constraints = array();
+        $constraints[School::$id] = $id;
+        $return = $this->getColumnsFromTableWithValues($constraints, self::ALLCOLUMNS, School::$table);
+        //only returning 1 so just return the first element in the array of size 1
+        return $return[0];
     }
 }

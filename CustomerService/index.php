@@ -35,8 +35,8 @@ switch($action)
         //get all of the service requests in the database
         $requests = $databaseManager->getAllServiceRequests();
         $headers = $databaseManager->getTableHeaders(ServiceRequest::$table);
-        //format the time for the requests
-        formatTimeArray($requests, array(ServiceRequest::$creationdate), "F d, Y");
+        //get the names and id's for the Schools
+        $schoolNames = $databaseManager->getAllSchoolNames();
         break;
     case 'createRequest':
         //get the names and id's for the Schools
@@ -68,12 +68,34 @@ switch($action)
         //get the id from the url
         $id = $_GET['id'];
         $request = $databaseManager->getServiceRequestWithID($id);
-        //unset the id
-        unset($id);
         //get the names and id's for the Schools
         $schoolNames = $databaseManager->getAllSchoolNames();
         break;
     case 'updateRequest':
+        //initialize the service request
+        $sr = $_POST;
+        $serviceRequest = 
+                new ServiceRequest
+                        (0, 
+                        $sr['ContactName'], 
+                        $sr['ContactEmail'], 
+                        $sr['ContactPhone'], 
+                        $sr['ClientName'], 
+                        $sr['SchoolID'], 
+                        $sr['OrderType'], 
+                        $sr['ContactType'], 
+                        $sr['Issue'], 
+                        $sr['Assignee'], 
+                        $sr['Notes'],
+                        $sr['Status'],
+                        $sr['PercentComplete']);
+        //set the id
+        $serviceRequest->id = $sr['ID'];
+        
+        //update the request
+        $databaseManager->updateServiceRequest($serviceRequest);
+        //redirect to the view screen
+        header('Location:.?action=viewRequests');
         break;
     default:
         //nothing

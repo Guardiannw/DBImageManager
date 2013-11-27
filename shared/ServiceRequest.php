@@ -35,14 +35,14 @@ class ServiceRequest extends DBO{
     public static $notes = 'Notes';
     public static $creationdate = 'CreationDate';
     
-    public function __construct($rID, $cName, $cEmail, $cPhone, $clientname, $schoolID, $oType, $cType, $issue, $aID, $notes)
+    public function __construct($rID, $cName, $cEmail, $cPhone, $clientname, $schoolID, $oType, $cType, $issue, $aID, $notes, $status = 'New', $percent = 0)
     {
         //call parent constructor first!!!
         parent::__construct();
         
         //initialize all the variables
         $this->rid = $rID;
-        $this->status = 'New'; // the default for all new requests
+        $this->status = $status; // the default 'New' for all new requests
         $this->cname = $cName;
         $this->cemail = $cEmail;
         $this->cphone = $cPhone;
@@ -52,7 +52,7 @@ class ServiceRequest extends DBO{
         $this->ctype = $cType;
         $this->issue = $issue;
         $this->aid = $aID;
-        $this->percent = 0;
+        $this->percent = $percent; //default 0 for all new requests
         $this->notes = $notes;
         $this->creationdate = date(parent::$MYSQLDATE);
     }

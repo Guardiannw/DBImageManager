@@ -45,14 +45,14 @@ global $schoolNames; //passed in from index
         <div class='inline-block alignleft'>
             <input type='text' id='ContactName' name='ContactName'/>
             <input type='tel' id='ContactPhone' name='ContactPhone'/>
-            <input type='text' id='ContactEmail' name='ContactEmail'/>
+            <input type='text' id='Conte[School::$name]actEmail' name='ContactEmail'/>
             
             <input type="text" id="ClientName" name="ClientName"> 
             
             <select id='SchoolID' name='SchoolID'>
             <?php foreach($schoolNames as $id => $name): ?>
                 <option value="<?php echo $id; ?>">
-                    <?php echo $name[School::$name]; ?>
+                    <?php echo $name; ?>
                 </option>
             <?php endforeach; ?>
             </select>

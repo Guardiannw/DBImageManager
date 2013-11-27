@@ -225,4 +225,54 @@ class DBM {
             echo $this->DBO->error;
         }
     }
+    
+    /**
+     * Updates a row in a table given a list of values where the keys are the column names
+     * and the values are the desired values.  MUST INCLUDE ID COLUMN
+     * @param String $table
+     * @param Assoc. Array $list MUST INCLUDE 'ID' Column and an associated value
+     */
+    public function updateTableRowWithID($table,$list)
+    {
+        
+        //get the id
+        $id = $list["ID"];
+        //take the id out of the list
+        unset($list["ID"]);
+        //prep the input for different data types
+        foreach($list as $key=>$value)
+        {
+            
+            //if any values are null, the explicity declare them as string 'NULL'
+            if(!isset($value))
+            {
+                $list[$key]= 'NULL';
+            }
+            
+            //prep all strings with single quotes
+            if(is_string($value))
+            {
+                $list[$key] = "'$value'";
+            }
+            
+        }
+        
+        //create a set array
+        $setArray = array();
+        foreach($list as $key=>$value)
+        {
+            $setArray[] = "$key = $value";
+        }
+        
+        //create set string
+        $setString = implode(", ", $setArray);
+        
+        //execute query
+        $formulatedQuery = "UPDATE $table SET $setString WHERE ID = $id";
+        $query = $this->DBO->query($formulatedQuery);
+        if(!$query)
+        {
+            echo $this->DBO->error;
+        }
+    }
 }
