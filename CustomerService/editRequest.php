@@ -82,8 +82,8 @@ $statusOpts = array("In Progress","Completed");
             <input type="text" id="ClientName" name="ClientName" value="<?php echo $clientname; ?>"> 
             
             <select id='SchoolID' name='SchoolID'>
-            <?php foreach ($schoolNames as $id => $name): ?>
-                <option value="<?php echo $id; ?>" <?php echo $id == $schoolID ? 'selected' : ''; ?> >
+            <?php foreach ($schoolNames as $sid => $name): ?>
+                <option value="<?php echo $sid; ?>" <?php echo $sid == $schoolID ? 'selected' : ''; ?> >
                     <?php echo $name; ?>
                 </option>
             <?php endforeach; ?>
@@ -93,7 +93,7 @@ $statusOpts = array("In Progress","Completed");
             <input type='text' id='Issue' name='Issue' value="<?php echo $issue; ?>"/>
             <input type='number' id='Assignee' name='Assignee' value="<?php echo $aid; ?>"/>
             <textarea id='Notes' name='Notes' rows="5" cols="30" ><?php echo $notes; ?></textarea>
-            <input type='number' id='PercentComplete' name='PercentComplete'>
+            <input type='number' id='PercentComplete' name='PercentComplete' value="25">
             <input type='hidden' id='ID' name='ID' value='<?php echo $id; ?>'>
         </div>
 

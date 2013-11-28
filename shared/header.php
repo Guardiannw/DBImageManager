@@ -23,6 +23,9 @@ and open the template in the editor.
         <title>Moore Studio Image Framework</title>
         <link rel="stylesheet" href="/MooreStudioProject/shared/main.css" type="text/css">
         <script src="/MooreStudioProject/shared/functions.js" type="text/javascript"></script>
+        <script src="/MooreStudioProject/shared/jquery/jquery.js" type="text/javascript"></script>
+        <script src="/MooreStudioProject/shared/jqueryui/jquery-ui.js" type="text/javascript"></script>
+        <script src="/MooreStudioProject/shared/json3/json3.js" type="text/javascript"></script>
     </head>
 <body>
     <div id="loginStatus">

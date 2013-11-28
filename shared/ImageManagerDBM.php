@@ -53,12 +53,15 @@ class ImageManagerDBM extends DBM
     
     /**
      * Returns all service requests from the database in the form of 
-     * an indexed array of associative array service requests.
+     * an indexed array of associative array service requests.  Will sort given a
+     * specified column string and ascending or descending value.
+     * @param string $sortBy DEFAULT null
+     * @param boolean $ascending DEFAULT false
      */
-    public function getAllServiceRequests()
+    public function getAllServiceRequests($sortBy = null, $ascending = false)
     {
         //read in all the rows
-        $input = $this->getTableRows(ServiceRequest::$table);
+        $input = $this->getTableRows(ServiceRequest::$table, $sortBy, $ascending);
         $output = array();
         
         //make them into objects and put them in an ID based array

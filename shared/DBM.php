@@ -90,11 +90,23 @@ class DBM {
      * Name: getTableRows
      * Params:
      * $table = string containing the table name
+     * @param string $sortBy Column name to sort by
+     * @param boolean $ascending True if ascending sort, false otherwise default = false
      * Returns: An numerical/associative array of the Table rows.
      */
-    public function getTableRows($table)
+    public function getTableRows($table, $sortBy = null, $ascending = false)
     {
-        $query = $this->DBO->query("SELECT * FROM $table");
+        //check for sorting and prep accordingly
+        if(isset($sortBy))
+        {
+            $asc = $ascending ? "ASC" : "DESC";
+            $sortString = "ORDER BY $sortBy $asc";
+        }
+        else
+        {
+            $sortString = "";
+        }
+        $query = $this->DBO->query("SELECT * FROM $table $sortString");
         $results = array();
         $resultRow = mysqli_fetch_array($query, MYSQLI_ASSOC);
         while(isset($resultRow))
@@ -129,10 +141,22 @@ class DBM {
      * Params:
      * $columns = names of columns to retreive from table (ALLCOLUMNS will return all columns)
      * $table = string containing the table name
+     * @param string $sortBy Column name to sort by
+     * @param boolean $ascending True if ascending sort, false otherwise default = false
      * Returns: An numerical/associative array of the Table rows where the ID is the key.
      */
-    public function getColumnsFromTable($columns, $table)
+    public function getColumnsFromTable($columns, $table, $sortBy = null, $ascending = false)
     {
+        //check for sorting and prep accordingly
+        if(isset($sortBy))
+        {
+            $asc = $ascending ? "ASC" : "DESC";
+            $sortString = "ORDER BY $sortBy $asc";
+        }
+        else
+        {
+            $sortString = "";
+        }
         //check for constants
         if($columns === self::ALLCOLUMNS)
         {
@@ -159,10 +183,23 @@ class DBM {
      * $constraints = associative array where the key is the column name and the value is the constraint
      * $columns = array of desired columns (ALLCOLUMNS will return all columns)
      * $table = string containing the table name
+     * @param string $sortBy Column name to sort by
+     * @param boolean $ascending True if ascending sort, false otherwise default = false
      * Returns: An numerical array of the associative Table row arrays.
      */
-    public function getColumnsFromTableWithValues($constraints, $columns, $table)
-    {//prep the input for different data types
+    public function getColumnsFromTableWithValues($constraints, $columns, $table, $sortBy = null, $ascending = false)
+    {
+        //check for sorting and prep accordingly
+        if(isset($sortBy))
+        {
+            $asc = $ascending ? "ASC" : "DESC";
+            $sortString = "ORDER BY $sortBy $asc";
+        }
+        else
+        {
+            $sortString = "";
+        }
+        //prep the input for different data types
         foreach($constraints as $key=>$value)
         {
             
@@ -170,7 +207,8 @@ class DBM {
             if(!isset($value))
             {
                 unset($constraints[$key]);
-            }else if(is_string($value))
+            }
+            else if(is_string($value))
             {
                 //prep all strings with a quote
                 $constraints[$key] = "'$value'";
@@ -190,7 +228,7 @@ class DBM {
             $columns = $this->getTableHeaders($table);
         }
         //execute query
-        $formulatedQuery = "SELECT ".implode(',',$columns)." FROM $table WHERE ".implode(' AND ', $statements);
+        $formulatedQuery = "SELECT ".implode(',',$columns)." FROM $table WHERE ".implode(' AND ', $statements)." $sortString";
         $query = $this->DBO->query($formulatedQuery);
         $results = array();
         $resultRow = mysqli_fetch_array($query, MYSQLI_ASSOC);
