@@ -3,19 +3,37 @@
 /*
  * PHP Pre-Process Information
  */
-global $requests, $schoolNames;
+global $requests, $schoolNames, $userNames;
 
 //format the time for the requests
-formatTimeArray($requests, array(ServiceRequest::$creationdate), "F d, Y");
+formatTimeArray($requests, array(ServiceRequest::$creationdate), ServiceRequest::DEFAULTTIMEFORMAT);
 
 //format the SchoolID's with the school names
 foreach($requests as $key=>$request)
 {
+    //re-assign the schoolid field
     //create a simple link to the schoolid
     $sid = $request[ServiceRequest::$schoolid];
     
     //assign the school name to the schoolid field
     $requests[$key][ServiceRequest::$schoolid] = $schoolNames[(int)$sid];
+    unset($sid);
+    
+    //re-assign the receiverID field
+    //create a simple link to the schoolid
+    $sid = $request[ServiceRequest::$rid];
+    
+    //assign the user name to the receiverid field
+    $requests[$key][ServiceRequest::$rid] = implode(" ",$userNames[(int)$sid]);
+    unset($sid);
+    
+    //re-assign the assigneeID field
+    ////create a simple link to the schoolid
+    $sid = $request[ServiceRequest::$aid];
+    
+    //assign the user name to the asigneeid field
+    $requests[$key][ServiceRequest::$aid] = implode(" ",$userNames[(int)$sid]);
+    unset($sid);
     
     //take out the Notes section
     unset($requests[$key][ServiceRequest::$notes]);
@@ -89,31 +107,60 @@ $headers = array_keys(current($requests));
                 //get all of the rows to be changed
                 var rows = $("tbody > tr");
                 
-                //go through all of the rows
-                $(rows).each(function()
+                //go through each entry in the data
+                $(data).each(function()
                 {
-                    var row = $(this)[0]; // get the current row
-                    //get current row index
-                    var rowIndex = $(rows).index(this);
-                    //get the current row object from the imported data
-                    var rowData = data[rowIndex];
+                    var rowData = $(this)[0]; // get the current row in the data
                     
-                    //go through all of the columns in the row
-                    $(row.cells).each(function()
+                    var rowIndex = $(data).index(this); // get the current row index in the data array
+                    
+                    var currentRow;
+                    
+                    //check if this row exists otherwise make it
+                    if(rows.length > rowIndex){
+                        currentRow = rows[rowIndex];
+                    }
+                    else
+                    {
+                        //clone the last row
+                        currentRow = $(rows).last().clone(true).get(0);
+                        
+                        //insert it after the last row
+                        $(currentRow).insertAfter(rows.last());
+                    }
+                    
+                    //fill the row in with the appropriate data
+                    $(currentRow.cells).each(function()
                     {
                         var column = $(this)[0]; // get the current column
                         
                         //get the column header
                         var header = $(column).attr("headers");
                         
-                        //get the same column value from the rowData
-                        var insertValue = rowData[header];
-                        
-                        //insert the value into the column
-                        $(column).html(insertValue);
+                        //do something different if the column is the edit column
+                        if(header == "Edit")
+                        {
+                            //get the input for the id
+                            var input = $(column).find("input[name='id']");
+                            
+                            //put the id in the value
+                            $(input).attr("value",rowData["ID"]);
+                        }
+                        else
+                        {
+                            //get the same column value from the rowData
+                            var insertValue = rowData[header];
+
+                            //insert the value into the column
+                            $(column).html(insertValue);
+                        }
                     });
-                    
                 });
+                
+                //remove all of the other rows from the table
+                var dataLength = $(data).length;
+                $("tbody > tr:gt(" + dataLength + "),tbody > tr:eq(" + dataLength + ")").remove();
+                
             });
         });
         
@@ -131,7 +178,7 @@ $headers = array_keys(current($requests));
             <?php endforeach;?>
             
             <!-- Edit Header -->
-            <th>
+            <th id="Edit">
                 Edit
             </th>
         </tr>
@@ -147,7 +194,7 @@ $headers = array_keys(current($requests));
             <?php endforeach; ?>
             
             <!-- Input the edit button -->
-            <td>
+            <td headers="Edit">
                 <form method="GET">
                     <input type='hidden' name='id' value='<?php echo $row[ServiceRequest::$id]; ?>'>
                     <input type='hidden' name='action' value='editRequest'>

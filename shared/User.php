@@ -15,6 +15,10 @@ include_once('DBO.php');
 class User extends DBO {
 
     //class constants
+    const  kGETFNAME = 1;
+    const kGETLNAME = 2;
+    const kGETFULLNAME = 3;
+    
     //the table name
     public static $table = 'Users';
     //The keys for all pairs

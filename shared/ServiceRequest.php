@@ -14,6 +14,7 @@ require_once('DBO.php');
 class ServiceRequest extends DBO{
     
     //class constants
+    const DEFAULTTIMEFORMAT = "F d, Y";
     
     //the table name
     public static $table = 'ServiceRequests';

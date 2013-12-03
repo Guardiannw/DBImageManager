@@ -22,6 +22,10 @@ session_start(); //must be called before any html is sent on every page that nee
 //outside variables
 global $databaseManager;
 
+
+//check to make sure the user is logged in
+require_once('../loginRedirect.php');
+
 //Contact the model to get the appropriate information
 if(isset($_GET['action']))
 {
@@ -40,17 +44,23 @@ switch($action)
         $requests = $databaseManager->getAllServiceRequests();
         //get the names and id's for the Schools
         $schoolNames = $databaseManager->getAllSchoolNames();
+        //get the names and id's for all Users
+        $userNames = $databaseManager->getAllUserNames(User::kGETFULLNAME);
         break;
     case 'createRequest':
         //get the names and id's for the Schools
         $schoolNames = $databaseManager->getAllSchoolNames();
+        //get the names and id's for all Users
+        $userNames = $databaseManager->getAllUserNames(User::kGETFULLNAME);
+        //pass in the current user ID
+        $userID = $_SESSION['User']->id;
         break;
     case 'submitRequest':
         //initialize the service request
         $sr = $_POST;
         $serviceRequest = 
                 new ServiceRequest
-                        (0, 
+                       ($sr['ReceiverID'], 
                         $sr['ContactName'], 
                         $sr['ContactEmail'], 
                         $sr['ContactPhone'], 
@@ -73,13 +83,15 @@ switch($action)
         $request = $databaseManager->getServiceRequestWithID($id);
         //get the names and id's for the Schools
         $schoolNames = $databaseManager->getAllSchoolNames();
+        //get the names and id's for all Users
+        $userNames = $databaseManager->getAllUserNames(User::kGETFULLNAME);
         break;
     case 'updateRequest':
         //initialize the service request
         $sr = $_POST;
         $serviceRequest = 
                 new ServiceRequest
-                        (0, 
+                        ($sr['ReceiverID'], 
                         $sr['ContactName'], 
                         $sr['ContactEmail'], 
                         $sr['ContactPhone'], 
@@ -126,7 +138,4 @@ switch($action)
 
 //draw the footer
 include_once('../shared/footer.php');//draw the footer
-
-
-
 ?>

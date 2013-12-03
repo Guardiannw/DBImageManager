@@ -12,7 +12,8 @@ require_once('../shared/functions.php');
 
 session_start(); //must be called before any html is sent on every page that needs it
 
-
+//check to make sure the user is logged in
+require_once('../loginRedirect.php');
 
 //figure out where to redirect the page
 if(isset($_GET['window']))

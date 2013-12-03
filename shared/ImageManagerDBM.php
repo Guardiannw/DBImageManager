@@ -3,6 +3,7 @@ require_once('DBM.php');
 require_once('Client.php');
 require_once('ServiceRequest.php');
 require_once('User.php');
+require_once('School.php');
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -16,6 +17,9 @@ require_once('User.php');
  */
 class ImageManagerDBM extends DBM
 {
+    //const variables
+    
+    
     /**
      * Set up the DatabaseManager
      */
@@ -177,5 +181,44 @@ class ImageManagerDBM extends DBM
             $constraints[User::$password] = sha1($password); //use sha1 password conversion
             $user = $this->getColumnsFromTableWithValues($constraints, self::ALLCOLUMNS, User::$table);
             return $user[0];
+    }
+    
+    /**
+     * Returns an array of arrays where the 
+     * UserID is the key of the first array
+     * and the sql headers are the keys to the rest.
+     * @param {User Name Constant} $nameType Must either be kGETFNAME, kGETLNAME, or kGETFULLNAME
+     * @param {Datatype Constant} $returnType Must be either 
+     */
+    public function getAllUserNames($nameType)
+    {
+        //initialize $columns array to get the ID
+        $columns = array(User::$id);
+        switch($nameType)
+        {
+            case User::kGETFNAME:
+                array_push($columns,User::$fname);
+                break;
+            case User::kGETLNAME:
+                array_push($columns,User::$lname);
+                break;
+            case User::kGETFULLNAME:
+                array_push($columns, User::$fname,  User::$lname);
+                break;
+            default:
+                break;
+        }
+        
+        $userList = $this->getColumnsFromTable($columns, User::$table);
+
+        //set the ID to be the key for all rows
+        foreach($userList as &$value)
+        {
+            $id = $value[User::$id]; //get the id
+            unset($value[User::$id]);// remove it from the array
+            $return[$id] = $value; //set it as the key of the new array
+        }
+        
+        return $return;
     }
 }

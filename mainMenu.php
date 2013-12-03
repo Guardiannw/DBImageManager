@@ -1,20 +1,18 @@
-<table id="mainMenu">
+<table id="menu">
     <tr>
         <td>
-            <button>
-                <a href="?action=ImageManager">
-                Image Manager
-                </a>
-            </button>
+            <form method="GET">
+                    <input type='hidden' name='action' value='ImageManager'>
+                    <input type="submit" value="Image Manager">
+            </form>
         </td>
     </tr>
     <tr>
         <td>
-            <button>
-                <a href="?action=CustomerService">
-                    Customer Service
-                </a>
-            </button>
+            <form method="GET">
+                    <input type='hidden' name='action' value='CustomerService'>
+                    <input type="submit" value="Customer Service">
+            </form>
         </td>
     </tr>
 </table>

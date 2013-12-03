@@ -2,11 +2,11 @@
 /*
  * PHP Pre-Process Information
  */
-global $request, $schoolNames, $id;
+global $request, $schoolNames, $id, $userNames;
 
 //variables for request
 $schoolID = (int)$request[ServiceRequest::$schoolid];
-$rid = $request[ServiceRequest::$rid];
+$rid = (int)$request[ServiceRequest::$rid];
 $status = $request[ServiceRequest::$status];
 $cname = $request[ServiceRequest::$cname];
 $cemail = $request[ServiceRequest::$cemail];
@@ -15,7 +15,7 @@ $clientname = $request[ServiceRequest::$clientname];
 $otype = $request[ServiceRequest::$otype];
 $ctype = $request[ServiceRequest::$ctype];
 $issue = $request[ServiceRequest::$issue];
-$aid = $request[ServiceRequest::$aid];
+$aid = (int)$request[ServiceRequest::$aid];
 $percent = $request[ServiceRequest::$percent];
 $notes = $request[ServiceRequest::$notes];
 $creationdate = $request[ServiceRequest::$creationdate];
@@ -24,78 +24,92 @@ $creationdate = $request[ServiceRequest::$creationdate];
 $statusOpts = array("In Progress","Completed");
 ?>
 
-<div id="header">
-    <h1>Edit Request</h1>
+<div id="title">
+    Edit Request
 </div>
 <div id="content">
-    <form id='createRequest' method="post" action='?action=updateRequest'>
-        <div class="alignright inline-block">
-            <label for='Status'>
-                Status
-            </label>
-            <label for='ContactName'>
-                Contact Name
-            </label>
-            <label for='ContactPhone'>
-                Contact Phone
-            </label>
-            <label for='ContactEmail'>
-                Contact Email
-            </label>
-            <label for='ClientName'>
-                Client
-            </label>
-            <label for='SchoolName'>
-                School
-            </label>
-            <label for='OrderType'>
-                Order Type
-            </label>
-            <label for='ContactType'>
-                Contact Type
-            </label>
-            <label for='Issue'>
-                Issue
-            </label>
-            <label for='Assignee'>
-                Assign To
-            </label>
-            <label for='Notes'>
-                Notes
-            </label>
-            <label for='PercentComplete'>
-                Percent Complete
-            </label>
-        </div>
-        <div class='inline-block alignleft'>
-            <select id='Status' name='Status'>
-            <?php foreach ($statusOpts as $name): ?>
-                <option value="<?php echo $name; ?>" <?php echo $status == $name ? 'selected' : ''; ?> >
-                    <?php echo $name; ?>
-                </option>
-            <?php endforeach; ?>
-            </select>
-            <input type='text' id='ContactName' name='ContactName' value="<?php echo $cname; ?>"/>
-            <input type='tel' id='ContactPhone' name='ContactPhone' value="<?php echo $cphone; ?>"/>
-            <input type='text' id='ContactEmail' name='ContactEmail' value="<?php echo $cemail; ?>"/>
+    <form id='editRequest' class="dataForm" method="post" action='?action=updateRequest'>
+        <div class="table">
+            <div class="row">
+                <label for='Status'>Status</label>
+                <select id='Status' name='Status'>
+                <?php foreach ($statusOpts as $name): ?>
+                    <option value="<?php echo $name; ?>" <?php echo $status == $name ? 'selected' : ''; ?> >
+                        <?php echo $name; ?>
+                    </option>
+                <?php endforeach; ?>
+                </select>
+            </div>
             
-            <input type="text" id="ClientName" name="ClientName" value="<?php echo $clientname; ?>"> 
+            <div class='row'>
+                <label for='ContactName'>Contact Name</label>
+                <input type='text' id='ContactName' name='ContactName' value="<?php echo $cname; ?>"/>
+            </div>
             
-            <select id='SchoolID' name='SchoolID'>
-            <?php foreach ($schoolNames as $sid => $name): ?>
-                <option value="<?php echo $sid; ?>" <?php echo $sid == $schoolID ? 'selected' : ''; ?> >
-                    <?php echo $name; ?>
-                </option>
-            <?php endforeach; ?>
-            </select>
-            <input type='text' id='OrderType' name='OrderType' value="<?php echo $otype; ?>"/>
-            <input type='text' id='ContactType' name='ContactType' value="<?php echo $ctype; ?>"/>
-            <input type='text' id='Issue' name='Issue' value="<?php echo $issue; ?>"/>
-            <input type='number' id='Assignee' name='Assignee' value="<?php echo $aid; ?>"/>
-            <textarea id='Notes' name='Notes' rows="5" cols="30" ><?php echo $notes; ?></textarea>
-            <input type='number' id='PercentComplete' name='PercentComplete' value="25">
-            <input type='hidden' id='ID' name='ID' value='<?php echo $id; ?>'>
+            <div class='row'>
+                <label for='ContactPhone'>Contact Phone</label>
+                <input type='tel' id='ContactPhone' name='ContactPhone' value="<?php echo $cphone; ?>"/>
+            </div>
+            
+            <div class='row'>
+                <label for='ContactEmail'>Contact Email</label>
+                <input type='text' id='ContactEmail' name='ContactEmail' value="<?php echo $cemail; ?>"/>
+            </div>
+            
+            <div class='row'>
+                <label for='ClientName'>Client</label>
+                <input type="text" id="ClientName" name="ClientName" value="<?php echo $clientname; ?>"> 
+            </div>
+            
+            <div class='row'>
+                <label for='SchoolName'>School</label>
+                <select id='SchoolID' name='SchoolID'>
+                <?php foreach ($schoolNames as $sid => $name): ?>
+                    <option value="<?php echo $sid; ?>" <?php echo $sid == $schoolID ? 'selected' : ''; ?> >
+                        <?php echo $name; ?>
+                    </option>
+                <?php endforeach; ?>
+                </select>
+            </div>
+            
+            <div class='row'>
+                <label for='OrderType'>Order Type</label>
+                <input type='text' id='OrderType' name='OrderType' value="<?php echo $otype; ?>"/>
+            </div>
+            
+            <div class='row'>
+                <label for='ContactType'>Contact Type</label>
+                <input type='text' id='ContactType' name='ContactType' value="<?php echo $ctype; ?>"/>
+            </div>
+            
+            <div class='row'>
+                <label for='Issue'>Issue</label>
+                <input type='text' id='Issue' name='Issue' value="<?php echo $issue; ?>"/>
+            </div>
+            
+            <div class='row'>
+                <label for='Assignee'>Assign To</label>
+                <select id="Assignee" name ="Assignee">
+                <?php foreach($userNames as $uid => $name): ?>
+                    <option value="<?php echo $uid; ?>" <?php echo $uid == $aid ? 'selected' : ''; ?> >
+                        <?php echo implode(" ",$name); ?>
+                    </option>
+                <?php endforeach; ?>
+                </select>
+            </div>
+            
+            <div class='row'>
+                <label for='Notes'>Notes</label>
+                <textarea id='Notes' name='Notes' rows="5" cols="30" ><?php echo $notes; ?></textarea>
+            </div>
+            
+            <div class="row">
+                <label for='PercentComplete'>Percent Complete</label>
+                <input type='number' id='PercentComplete' name='PercentComplete' value="<?php echo $percent; ?>">
+            </div>
         </div>
+        <input type='hidden' id='ID' name='ID' value='<?php echo $id; ?>'>
+        <input type="hidden" value="<?php echo $rid; ?>" name="ReceiverID">
 
         <input type='submit' value="Submit">
     </form>
