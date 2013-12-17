@@ -78,6 +78,69 @@ class ImageManagerDBM extends DBM
     }
     
     /**
+     * Returns all of the rows in the table.  If specified, it will only retrieve the desired columns
+     * from each row.
+     * @param type $columns the desired Columns to retrieve from the table.
+     * @param type $sortBy Column name to sort by
+     * @param type $ascending Sort by true = ascending or false = descending
+     * @return Associative Array containing the specified columns of every service requests in the table
+     */
+    public function getAllServiceRequestsWithColumns($columns = self::ALLCOLUMNS, $sortBy = null, $ascending = false)
+    {
+        //read in all the rows
+        $input = $this->getColumnsFromTable($columns, ServiceRequest::$table, $sortBy, $ascending);
+        $output = array();
+        
+        //if the ID element exists
+        //make them into assoc arrays and put them in an ID based array and return the sorted array
+        if(array_key_exists(ServiceRequest::$id, $input[0]))
+        {
+            foreach($input as $value)
+            {
+                $output[$value[ServiceRequest::$id]] = $value;
+            }
+            return $output;
+        }
+        else
+        {
+            //otherwise return the array as it was
+            return $input;
+        }
+    }
+    
+    /**
+     * Returns all of the rows in the table.  If specified, it will only retrieve the desired columns
+     * from each row. It will only return the rows that satisfy the search constraint
+     * @param Associative array where the key is the column name and the value is the search constraint
+     * @param type $columns the desired Columns to retrieve from the table.
+     * @param type $sortBy Column name to sort by
+     * @param type $ascending Sort by true = ascending or false = descending
+     * @return Associative Array containing the specified columns of every service requests in the table
+     */
+    public function searchAllServiceRequestsWithColumns($constraints = null, $columns = self::ALLCOLUMNS, $sortBy = null, $ascending = false)
+    {
+        //read in all the rows
+        $input = $this->getColumnsFromTableWithSearchValues($constraints,$columns, ServiceRequest::$table, $sortBy, $ascending);
+        $output = array();
+        
+        //if the ID element exists
+        //make them into assoc arrays and put them in an ID based array and return the sorted array
+        if(array_key_exists(ServiceRequest::$id, $input[0]))
+        {
+            foreach($input as $value)
+            {
+                $output[$value[ServiceRequest::$id]] = $value;
+            }
+            return $output;
+        }
+        else
+        {
+            //otherwise return the array as it was
+            return $input;
+        }
+    }
+    
+    /**
      * Returns an associative array of a service request 
      * given a specific id.
      * @param int $id

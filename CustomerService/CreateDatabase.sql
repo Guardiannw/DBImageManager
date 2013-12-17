@@ -10,7 +10,7 @@ CREATE TABLE ServiceRequests
     ContactPhone varchar(14) NULL,
     ClientID int,
     SchoolID int,
-    OrderType varchar(50) NULL,
+    IssueType varchar(50) NULL,
     ContactType varchar(25) NULL,
     Issue text NULL,
     AssigneeID int DEFAULT 0,

@@ -41,7 +41,7 @@ switch($action)
 {
     case 'viewRequests':
         //get all of the service requests in the database
-        $requests = $databaseManager->getAllServiceRequests();
+        $requests = $databaseManager->getAllServiceRequestsWithColumns(ServiceRequest::getViewColumns());
         //get the names and id's for the Schools
         $schoolNames = $databaseManager->getAllSchoolNames();
         //get the names and id's for all Users
@@ -66,7 +66,7 @@ switch($action)
                         $sr['ContactPhone'], 
                         $sr['ClientName'], 
                         $sr['SchoolID'], 
-                        $sr['OrderType'], 
+                        $sr['IssueType'], 
                         $sr['ContactType'], 
                         $sr['Issue'], 
                         $sr['Assignee'], 
@@ -97,15 +97,30 @@ switch($action)
                         $sr['ContactPhone'], 
                         $sr['ClientName'], 
                         $sr['SchoolID'], 
-                        $sr['OrderType'], 
+                        $sr['IssueType'], 
                         $sr['ContactType'], 
                         $sr['Issue'], 
                         $sr['Assignee'], 
                         $sr['Notes'],
                         $sr['Status'],
                         $sr['PercentComplete']);
-        //set the id
+        //set the other variables
         $serviceRequest->id = $sr['ID'];
+        $serviceRequest->creationdate = $sr['CreationDate'];
+        $serviceRequest->howresolved = $sr['HowResolved'];
+        
+        //if the date is empty and the task has been completed, then set the date
+        if(empty($sr['CompletedDate']) && 
+                ($serviceRequest->status === "Completed/Unresolved" || 
+                 $serviceRequest->status === "Completed/Resolved")
+          )
+        {
+            $serviceRequest->completeddate = date(DBO::$MYSQLDATE);
+        }
+        else
+        {
+            $serviceRequest->completeddate = $sr['CompletedDate'];
+        }
         
         //update the request
         $databaseManager->updateServiceRequest($serviceRequest);

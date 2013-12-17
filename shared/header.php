@@ -22,6 +22,7 @@ and open the template in the editor.
         <meta charset="UTF-8">
         <title>Moore Studio Image Framework</title>
         <link rel="stylesheet" href="/MooreStudioProject/shared/main.css" type="text/css">
+        <link rel="stylesheet" href="/MooreStudioProject/shared/jqueryui/css/base/jquery-ui.css">
         <script src="/MooreStudioProject/shared/functions.js" type="text/javascript"></script>
         <script src="/MooreStudioProject/shared/jquery/jquery.js" type="text/javascript"></script>
         <script src="/MooreStudioProject/shared/jqueryui/jquery-ui.js" type="text/javascript"></script>

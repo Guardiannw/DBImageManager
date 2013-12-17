@@ -31,14 +31,14 @@ class DBM {
     {
        //set up the class variables
        $this->MYSQLIDATABASE = $db;
-       $this->MYSQLIHOST = $host;
+       $this->MYSQLIHOST = "p:".$host; // makek it a persistent connection
        $this->MYSQLIUSERNAME = $user;
        $this->MYSQLIPASSWORD = $pass;
        
        //try to make the connection to the database and server
        try
        {
-            $server = mysqli_connect($host, $user, $pass);
+            $server = mysqli_connect($this->MYSQLIHOST, $this->MYSQLIUSERNAME, $this->MYSQLIPASSWORD);
             if(!$server)
             {
                 throw new Exception('Server');
@@ -49,7 +49,7 @@ class DBM {
              *    mysqli_multi_query($server, file_get_contents($DatabaseFileURL));
              * }
              */
-            $database = mysqli_connect($host, $user, $pass, $db);
+            $database = mysqli_connect($this->MYSQLIHOST, $this->MYSQLIUSERNAME, $this->MYSQLIPASSWORD, $this->MYSQLIDATABASE);
             if(!$database) // if the database does not exist, print error message
             {
                 throw new Exception('Database');
@@ -100,12 +100,15 @@ class DBM {
         if(isset($sortBy))
         {
             $asc = $ascending ? "ASC" : "DESC";
+            $sortBy = $this->DBO->real_escape_string($sortBy); // for security
             $sortString = "ORDER BY $sortBy $asc";
         }
         else
         {
             $sortString = "";
         }
+        //escape the table
+        $table = $this->DBO->real_escape_string($table);
         $query = $this->DBO->query("SELECT * FROM $table $sortString");
         $results = array();
         $resultRow = mysqli_fetch_array($query, MYSQLI_ASSOC);
@@ -125,6 +128,8 @@ class DBM {
      */
     public function getTableHeaders($table)
     {
+        //escape table
+        $table = $this->DBO->real_escape_string($table);
         $query = $this->DBO->query("SELECT * FROM $table LIMIT 0,1");//only return 1 row to optomize it
         $fields = mysqli_fetch_fields($query);
         $results = array();
@@ -151,6 +156,7 @@ class DBM {
         if(isset($sortBy))
         {
             $asc = $ascending ? "ASC" : "DESC";
+            $sortBy = $this->DBO->real_escape_string($sortBy);
             $sortString = "ORDER BY $sortBy $asc";
         }
         else
@@ -163,15 +169,17 @@ class DBM {
             $columns = $this->getTableHeaders($table);
         }
         
-        //execute query
-        $query = $this->DBO->query("SELECT ".implode(',',$columns)." FROM $table");
-        $results = array();
-        $resultRow = mysqli_fetch_array($query, MYSQLI_ASSOC);
-        while(isset($resultRow))
+        //escape all columns
+        foreach($columns as $key=>$value)
         {
-            array_push($results, $resultRow);
-            $resultRow = mysqli_fetch_array($query, MYSQLI_ASSOC);
+            $columns[$key] = $this->DBO->real_escape_string($value);
         }
+        
+        //escape the table
+        $table = $this->DBO->real_escape_string($table);
+        //execute query
+        $query = $this->DBO->query("SELECT ".implode(',',$columns)." FROM $table $sortString");
+        $results = $query->fetch_all(MYSQLI_ASSOC);
         $query->free();
         return $results;
     }
@@ -193,33 +201,30 @@ class DBM {
         if(isset($sortBy))
         {
             $asc = $ascending ? "ASC" : "DESC";
+            $sortBy = $this->DBO->real_escape_string($sortBy);
             $sortString = "ORDER BY $sortBy $asc";
         }
         else
         {
             $sortString = "";
         }
-        //prep the input for different data types
+        
+        //prep the input for different data types & Create individual statements
+        $statements = array();
         foreach($constraints as $key=>$value)
         {
-            
+            $key = $this->DBO->real_escape_string($key);
+            $value = $this->DBO->real_escape_string($value);
             //if any values are null, then remove them
             if(!isset($value))
             {
                 unset($constraints[$key]);
             }
-            else if(is_string($value))
+            else
             {
-                //prep all strings with a quote
-                $constraints[$key] = "'$value'";
+                //escape all values
+                $statements[] = "$key = '$value'";
             }
-            
-        }
-        //create the individual constraint statements
-        $statements = array();
-        foreach($constraints as $key=>$value)
-        {
-            array_push($statements, "$key = $value");
         }
         
         //check for constants
@@ -227,6 +232,93 @@ class DBM {
         {
             $columns = $this->getTableHeaders($table);
         }
+        
+        //escape all columns
+        foreach($columns as $key=>$value)
+        {
+            $columns[$key] = $this->DBO->real_escape_string($value);
+        }
+        
+        //escape table
+        $table = $this->DBO->real_escape_string($table);
+        
+        //execute query
+        $formulatedQuery = "SELECT ".implode(',',$columns)." FROM $table WHERE ".implode(' AND ', $statements)." $sortString";
+        $query = $this->DBO->query($formulatedQuery);
+        $results = array();
+        $resultRow = mysqli_fetch_array($query, MYSQLI_ASSOC);
+        while(isset($resultRow))
+        {
+            array_push($results, $resultRow);
+            $resultRow = mysqli_fetch_array($query, MYSQLI_ASSOC);
+        }
+        $query->free();
+        return $results;
+    }
+    
+    /**
+     * Name: getColumnsFromTableWithValues
+     * Params:
+     * $constraints = associative array where the key is the column name and the value is the search constraint
+     * $columns = array of desired columns (ALLCOLUMNS will return all columns)
+     * $table = string containing the table name
+     * @param string $sortBy Column name to sort by
+     * @param boolean $ascending True if ascending sort, false otherwise default = false
+     * Returns: An numerical array of the associative Table row arrays.
+     */
+    public function getColumnsFromTableWithSearchValues($constraints, $columns, $table, $sortBy = null, $ascending = false)
+    {
+        //if there are no constraints, then call the other function
+        if(empty($constraints))
+        {
+            return $this->getColumnsFromTable($columns, $table, $sortBy, $ascending);
+        }
+        
+        //check for sorting and prep accordingly
+        if(isset($sortBy))
+        {
+            $asc = $ascending ? "ASC" : "DESC";
+            $sortBy = $this->DBO->real_escape_string($sortBy);
+            $sortString = "ORDER BY $sortBy $asc";
+        }
+        else
+        {
+            $sortString = "";
+        }
+        
+        //prep the input for different data types & Create individual statements
+        $statements = array();
+        foreach($constraints as $key=>$value)
+        {
+            $key = $this->DBO->real_escape_string($key);
+            $value = $this->DBO->real_escape_string($value);
+            //if any values are null, then remove them
+            if(!isset($value))
+            {
+                unset($constraints[$key]);
+            }
+            else
+            {
+                //escape all values
+                $statements[] = "$key LIKE '%$value%'";
+            }
+        }
+        
+        //check for constants
+        if($columns === self::ALLCOLUMNS)
+        {
+            $columns = $this->getTableHeaders($table);
+        }
+        
+        //escape all columns
+        foreach($columns as $key=>$value)
+        {
+            $columns[$key] = $this->DBO->real_escape_string($value);
+        }
+        
+        //escape table
+        $table = $this->DBO->real_escape_string($table);
+        
         //execute query
         $formulatedQuery = "SELECT ".implode(',',$columns)." FROM $table WHERE ".implode(' AND ', $statements)." $sortString";
         $query = $this->DBO->query($formulatedQuery);
@@ -251,29 +343,32 @@ class DBM {
      */
     public function insertIntoTable($table, $list)
     {
-        //get the columns
-        $columnString = implode(", ", array_keys($list));
-        
         //prep the input for different data types
         foreach($list as $key=>$value)
         {
+            $key = $this->DBO->real_escape_string($key);
+            $value = $this->DBO->real_escape_string($value);
             
             //if any values are null, the explicity declare them as string 'NULL'
             if(!isset($value))
             {
-                $list[$key]= 'NULL';
+                $escapedList[$key]= 'NULL';
             }
-            
-            //prep all strings with single quotes
-            if(is_string($value))
+            else
             {
-                $list[$key] = "'$value'";
+                $escapedList[$key] = "'$value'";
             }
             
         }
         
+        //get the columns
+        $columnString = implode(", ", array_keys($escapedList));
+        
         //get the values
-        $valueString = implode (", ", $list);
+        $valueString = implode (", ", $escapedList);
+        
+        //escape the table
+        $table = $this->DBO->real_escape_string($table);
         
         //execute query
         $formulatedQuery = "INSERT INTO $table ($columnString) VALUES ($valueString)";
@@ -294,37 +389,35 @@ class DBM {
     {
         
         //get the id
-        $id = $list["ID"];
+        $id = $this->DBO->real_escape_string($list["ID"]);
         //take the id out of the list
         unset($list["ID"]);
-        //prep the input for different data types
+        
+        //create a set array prep the input for different data types
+        $setArray = array();
         foreach($list as $key=>$value)
         {
+            $key = $this->DBO->real_escape_string($key);
+            $value = $this->DBO->real_escape_string($value);
             
             //if any values are null, the explicity declare them as string 'NULL'
             if(!isset($value))
             {
-                $list[$key]= 'NULL';
+                $escapedList[$key]= 'NULL';
             }
-            
-            //prep all strings with single quotes
-            if(is_string($value))
+            else
             {
-                $list[$key] = "'$value'";
+                $escapedList[$key] = "'$value'";
             }
+            //add to the set array
+            $setArray[] = "$key = $escapedList[$key]";
             
-        }
-        
-        //create a set array
-        $setArray = array();
-        foreach($list as $key=>$value)
-        {
-            $setArray[] = "$key = $value";
         }
         
         //create set string
         $setString = implode(", ", $setArray);
-        
+        //escape table
+        $table = $this->DBO->real_escape_string($table);
         //execute query
         $formulatedQuery = "UPDATE $table SET $setString WHERE ID = $id";
         $query = $this->DBO->query($formulatedQuery);

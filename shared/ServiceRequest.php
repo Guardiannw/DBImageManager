@@ -28,13 +28,25 @@ class ServiceRequest extends DBO{
     public static $cphone = 'ContactPhone';
     public static $clientname = 'ClientName';
     public static $schoolid = 'SchoolID';
-    public static $otype = 'OrderType';
+    public static $itype = 'IssueType';
     public static $ctype = 'ContactType';
     public static $issue = 'Issue';
     public static $aid = 'AssigneeID';
     public static $percent = 'PercentComplete';
     public static $notes = 'Notes';
     public static $creationdate = 'CreationDate';
+    public static $completeddate = 'CompletedDate';
+    public static $howresolved = "HowResolved";
+    
+    //possibilities for Status
+    public static $STATUSOPTIONS = array("In Progress","Completed/Unresolved", "Completed/Resolved");
+
+    //possibilities for IssueType
+    public static $ISSUETYPEOPTIONS = array("School Day", "Senior Portraits", "Sports/Teams", "Homecoming", "Prom", "Event", "Studio Portraits", "Yearbook", "Administration");
+
+    //possibilites for ContactType
+    public static $CONTACTTYPEOPTIONS = array("Phone", "Email", "In Studio", "Mail", "At School", "Other");
+    
     
     public function __construct($rID, $cName, $cEmail, $cPhone, $clientname, $schoolID, $oType, $cType, $issue, $aID, $notes, $status = 'New', $percent = 0)
     {
@@ -49,7 +61,7 @@ class ServiceRequest extends DBO{
         $this->cphone = $cPhone;
         $this->clientname = $clientname;
         $this->schoolid = $schoolID;
-        $this->otype = $oType;
+        $this->itype = $oType;
         $this->ctype = $cType;
         $this->issue = $issue;
         $this->aid = $aID;
@@ -70,7 +82,7 @@ class ServiceRequest extends DBO{
                                    $array[self::$cphone],
                                    $array[self::$clientname],
                                    $array[self::$schoolid],
-                                   $array[self::$otype],
+                                   $array[self::$itype],
                                    $array[self::$ctype],
                                    $array[self::$issue],
                                    $array[self::$aid],
@@ -81,7 +93,24 @@ class ServiceRequest extends DBO{
         $temp->percent = $array[self::$percent];
         $temp->status = $array[self::$status];
         $temp->creationdate = $array[self::$creationdate];
+        $temp->completeddate = $array[self::$completeddate];
+        $temp->howresolved = $array[self::$howresolved];
         
         return $temp;
+    }
+    
+    /**
+     * Returns an array of column names that should be used when viewing ServiceRequests in large
+     * quantity.
+     * @return Array of column names to return for the view
+     */
+    public static function getViewColumns()
+    {
+        //columnsForView
+        return    array(self::$id,          self::$status,
+                        self::$cname,       self::$cphone,
+                        self::$clientname,  self::$schoolid,
+                        self::$itype,       self::$aid,
+                        self::$creationdate,self::$completeddate);
     }
 }

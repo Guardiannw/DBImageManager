@@ -253,8 +253,16 @@ function mergeClientImageData($clientCSV, $imageCSV, $makecsv = false, $containH
  */
 function formatTime($time, $formatString)
 {
-    $timestamp = strtotime($time);
-    return date($formatString, $timestamp);
+    //if the time is not null
+    if($time !== "NULL" && isset($time))
+    {
+        $timestamp = strtotime($time);
+        return date($formatString, $timestamp);
+    }
+    else
+    {
+        return "N/A";
+    }
 }
 
 /**
