@@ -330,7 +330,7 @@ $headers = array_keys(current($requests));
         </thead>
         <tbody>
             <?php foreach($requests as $row): ?>
-            <tr>
+            <tr onclick="location.href='?action=viewRequest&id=<?php echo $row[ServiceRequest::$id]; ?>'">
                 <!-- Input normal row information -->
                 <?php foreach($row as $head=>$cols): ?>
                 <td headers="<?php echo $head; ?>">
@@ -341,8 +341,8 @@ $headers = array_keys(current($requests));
                 <!-- Input the edit button -->
                 <td headers="Edit">
                     <form method="GET">
-                        <input type='hidden' name='id' value='<?php echo $row[ServiceRequest::$id]; ?>'>
                         <input type='hidden' name='action' value='editRequest'>
+                        <input type='hidden' name='id' value='<?php echo $row[ServiceRequest::$id]; ?>'>
                         <input type="submit" value="Edit">
                     </form>
                 </td>

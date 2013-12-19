@@ -86,6 +86,15 @@ switch($action)
         //get the names and id's for all Users
         $userNames = $databaseManager->getAllUserNames(User::kGETFULLNAME);
         break;
+    case 'viewRequest':
+        //get the id from the url
+        $id = $_GET['id'];
+        $request = $databaseManager->getServiceRequestWithID($id);
+        //get the names and id's for the Schools
+        $schoolNames = $databaseManager->getAllSchoolNames();
+        //get the names and id's for all Users
+        $userNames = $databaseManager->getAllUserNames(User::kGETFULLNAME);
+        break;
     case 'updateRequest':
         //initialize the service request
         $sr = $_POST;
@@ -139,6 +148,9 @@ switch($action)
 {
     case 'viewRequests':
         include_once('viewRequests.php');
+        break;
+    case 'viewRequest':
+        include_once('viewRequest.php');
         break;
     case 'createRequest':
         include_once('CreateRequest.php'); //draw the main menu

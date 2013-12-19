@@ -43,11 +43,11 @@ div.table
     display: table-cell;
     vertical-align:central;
 }
-.row > label
+.row > *:first-child
 {
     text-align: right;
 }
-.row > input
+.row > *:last-child
 {
     text-align: left;
 }
@@ -93,11 +93,11 @@ div#title
     font-weight: 700;
 }
 
-form.dataForm
+form.dataForm, div#viewRequest
 {
     text-align:center;
 }
-form.dataForm > div.table
+form.dataForm > div.table, div#viewRequest
 {
     margin: auto;
     display: block;
@@ -105,7 +105,7 @@ form.dataForm > div.table
     border-bottom: 2px #000000 solid;
 }
 
-form.dataForm label
+form.dataForm .row > *:first-child, div#viewRequest .row > *:first-child
 {
     padding: 5px;
     padding-right: 5px;
@@ -114,11 +114,12 @@ form.dataForm label
     text-align: right;
 }
 
-form.dataForm .row > :not(label)
+form.dataForm .row > *:last-child, div#viewRequest .row > *:last-child
 {
     text-align: left;
     display: block;
     vertical-align: central;
+    margin: 0px;
     margin-left: 9px;
 }
 
@@ -155,6 +156,11 @@ table#viewRequests td
     padding: 5px;
     width: auto;
     height: auto;
+}
+table#viewRequests tbody tr:hover
+{
+    background-color:#785eec;
+    cursor:pointer;
 }
 
 thead
@@ -200,6 +206,16 @@ thead th
     font-weight: 800;
 }
 
+/* The header types */
+h1
+{
+    
+}
+
+h4
+{
+    
+}
 /* Custom Jquery UI Design */
 
 div#sliderArea

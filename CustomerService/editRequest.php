@@ -115,7 +115,7 @@ $contactTypeOpts = ServiceRequest::$CONTACTTYPEOPTIONS;
             </div>
             
             <div class='row'>
-                <label for='ContactType'>What <b>method of contact</b> did this individual use to contact you?e</label>
+                <label for='ContactType'>What <b>method of contact</b> did this individual use to contact you?</label>
                 <select id='ContactType' name='ContactType'>
                 <?php foreach ($contactTypeOpts as $name): ?>
                     <option value="<?php echo $name; ?>" <?php echo $ctype == $name ? 'selected' : ''; ?> >
