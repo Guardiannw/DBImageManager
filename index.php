@@ -2,6 +2,7 @@
 
 //set up error reporting for debugging
 error_reporting(E_ALL);
+mysqli_report(MYSQLI_REPORT_ERROR);
 
 //include necessary files
 require_once('shared/functions.php');

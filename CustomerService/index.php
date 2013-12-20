@@ -2,6 +2,7 @@
 
 //set up error reporting for debugging
 error_reporting(E_ALL);
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 //connect to the database and create the $databaseManager object
 require_once('connect.php');
@@ -126,9 +127,13 @@ switch($action)
         {
             $serviceRequest->completeddate = date(DBO::$MYSQLDATE);
         }
+        else if(empty($sr['CompletedDate']))
+        {
+            $serviceRequest->completeddate = null;
+        }
         else
         {
-            $serviceRequest->completeddate = $sr['CompletedDate'];
+            $serviceReqeust->completeddate = $sr['CompletedDate'];
         }
         
         //update the request

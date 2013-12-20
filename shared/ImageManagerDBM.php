@@ -43,16 +43,97 @@ class ImageManagerDBM extends DBM
      */
     public function addServiceRequest($serviceRequest)
     {
-        $this->insertIntoTable(ServiceRequest::$table, $serviceRequest->getVariables());
+        //prepare the statement
+        $stmt = $this->DBO->prepare("INSERT INTO ServiceRequests "
+                . "(Status, ReceiverID, ContactName, ContactEmail, ContactPhone, ClientName, SchoolID, IssueType, ContactType, Issue, AssigneeID, PercentComplete, Notes, CreationDate, CompletedDate, HowResolved)"
+                . "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        
+        if($stmt)
+        {
+            //bind all the parameters
+            $stmt->bind_param("sissssisssiissss",   $serviceRequest->status, 
+                                                    $serviceRequest->rid, 
+                                                    $serviceRequest->cname, 
+                                                    $serviceRequest->cemail, 
+                                                    $serviceRequest->cphone, 
+                                                    $serviceRequest->clientname, 
+                                                    $serviceRequest->schoolid, 
+                                                    $serviceRequest->itype, 
+                                                    $serviceRequest->ctype, 
+                                                    $serviceRequest->issue, 
+                                                    $serviceRequest->aid,
+                                                    $serviceRequest->percent,
+                                                    $serviceRequest->notes,
+                                                    $serviceRequest->creationdate,
+                                                    $serviceRequest->completeddate,
+                                                    $serviceRequest->howresolved);
+
+            //execute the statement
+            $stmt->execute();
+
+            //close the statement
+            $stmt->close();
+        }
     }
     
     /**
-     * Adds a service request object to the database.
+     * Updates a serviceRequest object in the database
      * @param {ServiceRequest} $serviceRequest
      */
     public function updateServiceRequest($serviceRequest)
     {
-        $this->updateTableRowWithID(ServiceRequest::$table, $serviceRequest->getVariables());
+        try
+        {
+            //prepare the statement
+            $stmt = $this->DBO->prepare("UPDATE ServiceRequests "
+                    . "SET Status = ?, "
+                    . "ReceiverID = ?, "
+                    . "ContactName = ?, "
+                    . "ContactEmail = ?, "
+                    . "ContactPhone = ?, "
+                    . "ClientName = ?, "
+                    . "SchoolID = ?, "
+                    . "IssueType = ?, "
+                    . "ContactType = ?, "
+                    . "Issue = ?, "
+                    . "AssigneeID = ?, "
+                    . "PercentComplete = ?, "
+                    . "Notes = ?, "
+                    . "CreationDate = ?, "
+                    . "CompletedDate = ?, "
+                    . "HowResolved = ? WHERE ID = ?");
+            if($stmt)
+            {
+                //bind all the parameters
+                $stmt->bind_param("sissssisssiissssi",  $serviceRequest->status, 
+                                                        $serviceRequest->rid, 
+                                                        $serviceRequest->cname, 
+                                                        $serviceRequest->cemail, 
+                                                        $serviceRequest->cphone, 
+                                                        $serviceRequest->clientname, 
+                                                        $serviceRequest->schoolid, 
+                                                        $serviceRequest->itype, 
+                                                        $serviceRequest->ctype, 
+                                                        $serviceRequest->issue, 
+                                                        $serviceRequest->aid,
+                                                        $serviceRequest->percent,
+                                                        $serviceRequest->notes,
+                                                        $serviceRequest->creationdate,
+                                                        $serviceRequest->completeddate,
+                                                        $serviceRequest->howresolved,
+                                                        $serviceRequest->id);
+
+                //execute the statement
+                $stmt->execute();
+
+                //close the statement
+                $stmt->close();
+            }
+        }
+        catch(Exception $e)
+        {
+            echo $e->getMessage();
+        }
     }
     
     /**
@@ -64,17 +145,61 @@ class ImageManagerDBM extends DBM
      */
     public function getAllServiceRequests($sortBy = null, $ascending = false)
     {
-        //read in all the rows
-        $input = $this->getTableRows(ServiceRequest::$table, $sortBy, $ascending);
-        $output = array();
-        
-        //make them into objects and put them in an ID based array
-        foreach($input as $value)
+        try
         {
-            $output[$value[ServiceRequest::$id]] = $value;
+            //prepare the statement
+            $stmt = $this->DBO->prepare("SELECT "
+                    . "ID, "
+                    . "Status, "
+                    . "ReceiverID, "
+                    . "ContactName, "
+                    . "ContactEmail, "
+                    . "ContactPhone, "
+                    . "ClientName, "
+                    . "SchoolID, "
+                    . "IssueType, "
+                    . "ContactType, "
+                    . "Issue, "
+                    . "AssigneeID, "
+                    . "PercentComplete, "
+                    . "Notes, "
+                    . "CreationDate, "
+                    . "CompletedDate, "
+                    . "HowResolved FROM ServiceRequests");
+            if($stmt)
+            {
+
+                //execute the statement
+                $stmt->execute();
+                
+                //bind the result to a variable
+                $results = $stmt->get_result();
+                
+                //get all of the results in 1 go
+                $return = $results->fetch_all(MYSQLI_NUM);
+
+                //close the statement
+                $stmt->close();
+                
+                if(isset($sortBy))
+                {
+                    //get the headers
+                    //EDIT: $headers = array_column($sortBy)
+                    //array_multisort($arr)
+                }
+                
+                return $return;
+            }
+            else
+            {
+                return null;
+            }
         }
-        
-        return $output;
+        catch(Exception $e)
+        {
+            echo $e->getMessage();
+            return null;
+        }
     }
     
     /**
@@ -87,9 +212,54 @@ class ImageManagerDBM extends DBM
      */
     public function getAllServiceRequestsWithColumns($columns = self::ALLCOLUMNS, $sortBy = null, $ascending = false)
     {
-        //read in all the rows
-        $input = $this->getColumnsFromTable($columns, ServiceRequest::$table, $sortBy, $ascending);
-        $output = array();
+        try
+        {
+            //prepare the statement
+            $stmt = $this->DBO->prepare("SELECT "
+                    . "ID, "
+                    . "Status, "
+                    . "ReceiverID, "
+                    . "ContactName, "
+                    . "ContactEmail, "
+                    . "ContactPhone, "
+                    . "ClientName, "
+                    . "SchoolID, "
+                    . "IssueType, "
+                    . "ContactType, "
+                    . "Issue, "
+                    . "AssigneeID, "
+                    . "PercentComplete, "
+                    . "Notes, "
+                    . "CreationDate, "
+                    . "CompletedDate, "
+                    . "HowResolved FROM ServiceRequests" . empty($sortBy) ? "" : " Order BY $sortBy " . $ascending ? "ASC" : "DESC");
+            if($stmt)
+            {
+
+                //execute the statement
+                $stmt->execute();
+                
+                //bind the result to a variable
+                $results = $stmt->get_result();
+                
+                //get all of the results in 1 go
+                $return = $results->fetch_all(MYSQLI_NUM);
+
+                //close the statement
+                $stmt->close();
+                
+                return $return;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        catch(Exception $e)
+        {
+            echo $e->getMessage();
+            return null;
+        }
         
         //if the ID element exists
         //make them into assoc arrays and put them in an ID based array and return the sorted array
