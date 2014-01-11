@@ -117,7 +117,7 @@ $headers = array_keys(current($requests));
             };
             
             //get the new data
-            $.getJSON("/MooreStudioProject/api/searchAndSortAllServiceRequests",senddata, function(data)
+            $.getJSON("/api/searchAndSortAllServiceRequests",senddata, function(data)
             {
                 //go through each entry in the data
                 $(data).each(function()
@@ -189,7 +189,7 @@ $headers = array_keys(current($requests));
             };
             
             //get the new data
-            $.getJSON("/MooreStudioProject/api/searchAndSortAllServiceRequests",senddata, function(data)
+            $.getJSON("/api/searchAndSortAllServiceRequests",senddata, function(data)
             {
                 //go through each entry in the data
                 $(data).each(function()
@@ -317,7 +317,7 @@ $headers = array_keys(current($requests));
                 <?php foreach($headers as $col): ?>
                 <th id="<?php echo $col; ?>">
                     <?php echo $col; ?>
-                    <img src="/MooreStudioProject/shared/images/square.png" id="img<?php echo $col; ?>">
+                    <img src="/shared/images/square.png" id="img<?php echo $col; ?>">
                     <input type="text" id="search<?php echo $col; ?>" name="<?php echo $col; ?>" class="columnSearch">
                 </th>
                 <?php endforeach;?>

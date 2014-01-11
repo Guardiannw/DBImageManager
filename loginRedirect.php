@@ -4,5 +4,5 @@
 if(!isset($_SESSION['User']))
 {
     //redirect to login page
-    header("Location: /MooreStudioProject/index.php");
+    header("Location: /index.php");
 }
