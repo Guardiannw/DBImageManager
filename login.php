@@ -14,8 +14,8 @@
         <div id='loginBox'>
             <form id="login" method="POST" action="?action=processLogin">
                 <div class='row'>
-                    <label for="Email">Email: </label>
-                    <input type="text" id="Email" name="Email">
+                    <label for="UserName">UserName: </label>
+                    <input type="text" id="UserName" name="UserName">
                 </div>
                 <div class='row'>
                     <label for="Password">Password: </label>

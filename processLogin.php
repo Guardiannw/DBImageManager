@@ -6,7 +6,7 @@ global $loginInfo, $session, $databaseManager;
 try
 {
     //verify with database;
-    $user = $databaseManager->getUserFromLogin($loginInfo['Email'], $loginInfo['Password']);
+    $user = $databaseManager->getUserFromLogin($loginInfo['UserName'], $loginInfo['Password']);
     
     //if it was not successful then throw an error
     if(empty($user))
