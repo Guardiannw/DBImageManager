@@ -407,10 +407,10 @@ class ImageManagerDBM extends DBM
      * @param String $password
      * @return Assoc Array User
      */
-    public function getUserFromLogin($email, $password)
+    public function getUserFromLogin($username, $password)
     {
             $constraints = array();
-            $constraints[User::$email] = $email;
+            $constraints[User::$username] = $username;
             $constraints[User::$password] = sha1($password); //use sha1 password conversion
             $user = $this->getColumnsFromTableWithValues($constraints, self::ALLCOLUMNS, User::$table);
             return $user[0];

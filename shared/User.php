@@ -27,8 +27,9 @@ class User extends DBO {
     public static $lname = 'LastName';
     public static $password = 'Password';
     public static $email = 'Email';
+    public static $username = 'UserName';
 
-    public function __construct($fname, $lname, $password, $email, $id = 0) {
+    public function __construct($fname, $lname, $password, $email, $username, $id = 0) {
         //call parent constructor first!!!
         parent::__construct();
 
@@ -39,6 +40,7 @@ class User extends DBO {
         $this->lname = $lname;
         $this->password = $password;
         $this->email = $email;
+	$this->username = $username;
     }
 
     /**
@@ -53,6 +55,7 @@ class User extends DBO {
         isset($array[self::$lname]) ? $array[self::$lname] : null,
         isset($array[self::$password]) ? $array[self::$password] : null,
         isset($array[self::$email]) ? $array[self::$email] : null,
+        isset($array[self::$username]) ? $array[self::$username] : null,
         isset($array[self::$id]) ? $array[self::$id] : null
         );
         return $temp;
