@@ -170,6 +170,16 @@ $headers = array_keys(current($requests));
                             $(column).html(insertValue);
                         }
                     });
+                    //create the onclick link to view the request
+                    $("tbody > tr:eq(" + rowIndex + ")").click(function()
+                    {
+                        //on each onclick, link to the request); referenced by the id
+                        //get the id of the link to view
+                        var id = $(this).children("[headers='ID']").html();
+                        
+                        //set the location
+                        location.href = '?action=viewRequest&id=' + id;
+                    });
                 });
                 
                 //remove all of the other rows from the table
@@ -185,7 +195,7 @@ $headers = array_keys(current($requests));
             var senddata = {
             "column": selectedSort,
             "ascending":ascending,
-            "constraints":getSearchBoxData()
+            "constraints":getSearchBoxData()    
             };
             
             //get the new data
@@ -243,6 +253,17 @@ $headers = array_keys(current($requests));
                             $(column).html(insertValue);
                         }
                     });
+                    //create the onclick link to view the request
+                    $("tbody > tr:eq(" + rowIndex + ")").click(function()
+                    {
+                        //on each onclick, link to the request); referenced by the id
+                        //get the id of the link to view
+                        var id = $(this).children("[headers='ID']").html();
+                        
+                        //set the location
+                        location.href = '?action=viewRequest&id=' + id;
+                    });
+                    
                 });
                 
                 //remove all of the other rows from the table
@@ -306,6 +327,17 @@ $headers = array_keys(current($requests));
                 $(searchBox).slideUp();
         });
         
+        //set up all onclicks for all the rows at default
+        $("tbody > tr").click(function()
+        {
+            //on each onclick, link to the request); referenced by the id
+            //get the id of the link to view
+            var id = $(this).children("[headers='ID']").html();
+
+            //set the location
+            location.href = '?action=viewRequest&id=' + id;
+        });
+        
     });
 </script>
 
@@ -330,7 +362,7 @@ $headers = array_keys(current($requests));
         </thead>
         <tbody>
             <?php foreach($requests as $row): ?>
-            <tr onclick="location.href='?action=viewRequest&id=<?php echo $row[ServiceRequest::$id]; ?>'">
+            <tr>
                 <!-- Input normal row information -->
                 <?php foreach($row as $head=>$cols): ?>
                 <td headers="<?php echo $head; ?>">
