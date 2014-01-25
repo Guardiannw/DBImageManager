@@ -3,37 +3,7 @@
 /*
  * PHP Pre-Process Information
  */
-global $requests, $schoolNames, $userNames;
-
-//format the time for the requests
-formatTimeArray($requests, array(ServiceRequest::$creationdate, ServiceRequest::$completeddate), ServiceRequest::DEFAULTTIMEFORMAT);
-//format the SchoolID's with the school names
-foreach($requests as $key => $request)
-{
-    //re-assign the schoolid field
-    //create a simple link to the schoolid
-    $sid = $request[ServiceRequest::$schoolid];
-    
-    //assign the school name to the schoolid field
-    $requests[$key][ServiceRequest::$schoolid] = $schoolNames[(int)$sid];
-    unset($sid);
-    
-    //re-assign the receiverID field
-    //create a simple link to the schoolid
-    //$sid = $request[ServiceRequest::$rid];
-    
-    //assign the user name to the receiverid field
-    //$requests[$key][ServiceRequest::$rid] = implode(" ",$userNames[(int)$sid]);
-    //unset($sid);
-    
-    //re-assign the assigneeID field
-    ////create a simple link to the schoolid
-    $sid = $request[ServiceRequest::$aid];
-    
-    //assign the user name to the asigneeid field
-    $requests[$key][ServiceRequest::$aid] = implode(" ",$userNames[(int)$sid]);
-    unset($sid);
-}
+global $requests;
 
 //get the headers from first element of array.
 $headers = array_keys(current($requests));

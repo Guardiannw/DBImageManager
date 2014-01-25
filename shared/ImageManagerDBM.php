@@ -148,24 +148,23 @@ class ImageManagerDBM extends DBM
         try
         {
             //prepare the statement
-            $stmt = $this->DBO->prepare("SELECT "
-                    . "ID, "
-                    . "Status, "
-                    . "ReceiverID, "
-                    . "ContactName, "
-                    . "ContactEmail, "
-                    . "ContactPhone, "
-                    . "ClientName, "
-                    . "SchoolID, "
-                    . "IssueType, "
-                    . "ContactType, "
-                    . "Issue, "
-                    . "AssigneeID, "
-                    . "PercentComplete, "
-                    . "Notes, "
-                    . "CreationDate, "
-                    . "CompletedDate, "
-                    . "HowResolved FROM ServiceRequests");
+            $stmt = $this->DBO->prepare("SELECT 
+                                            ServiceRequests.ID,
+                                            Status,
+                                            ContactName,
+                                            ContactPhone,
+                                            ClientName,
+                                            Schools.Name AS School,
+                                            IssueType,
+                                            concat(Users.FirstName,' ', Users.LastName) AS Assignee,
+                                            DATE_FORMAT(CreationDate, '%M %e, %Y') AS CreationDate,
+                                            DATE_FORMAT(CompletedDate, '%M %e, %Y') AS CompletedDate
+                                        FROM
+                                            ServiceRequests
+                                                JOIN
+                                            Schools ON ServiceRequests.SchoolID = Schools.ID
+                                                JOIN
+                                            Users ON Users.ID = ServiceRequests.AssigneeID");
             if($stmt)
             {
 
@@ -176,17 +175,10 @@ class ImageManagerDBM extends DBM
                 $results = $stmt->get_result();
                 
                 //get all of the results in 1 go
-                $return = $results->fetch_all(MYSQLI_NUM);
+                $return = $results->fetch_all(MYSQLI_ASSOC);
 
                 //close the statement
                 $stmt->close();
-                
-                if(isset($sortBy))
-                {
-                    //get the headers
-                    //EDIT: $headers = array_column($sortBy)
-                    //array_multisort($arr)
-                }
                 
                 return $return;
             }
@@ -215,24 +207,23 @@ class ImageManagerDBM extends DBM
         try
         {
             //prepare the statement
-            $stmt = $this->DBO->prepare("SELECT "
-                    . "ID, "
-                    . "Status, "
-                    . "ReceiverID, "
-                    . "ContactName, "
-                    . "ContactEmail, "
-                    . "ContactPhone, "
-                    . "ClientName, "
-                    . "SchoolID, "
-                    . "IssueType, "
-                    . "ContactType, "
-                    . "Issue, "
-                    . "AssigneeID, "
-                    . "PercentComplete, "
-                    . "Notes, "
-                    . "CreationDate, "
-                    . "CompletedDate, "
-                    . "HowResolved FROM ServiceRequests" . (empty($sortBy) ? null : (" Order BY $sortBy " . ($ascending ? "ASC" : "DESC"))));
+            $stmt = $this->DBO->prepare("SELECT 
+                                            ServiceRequests.ID,
+                                            Status,
+                                            ContactName,
+                                            ContactPhone,
+                                            ClientName,
+                                            Schools.Name AS School,
+                                            IssueType,
+                                            concat(Users.FirstName,' ', Users.LastName) AS Assignee,
+                                            DATE_FORMAT(CreationDate, '%M %e, %Y') AS CreationDate,
+                                            DATE_FORMAT(CompletedDate, '%M %e, %Y') AS CompletedDate
+                                        FROM
+                                            ServiceRequests
+                                                JOIN
+                                            Schools ON ServiceRequests.SchoolID = Schools.ID
+                                                JOIN
+                                            Users ON Users.ID = ServiceRequests.AssigneeID" . (empty($sortBy) ? null : (" Order BY $sortBy " . ($ascending ? "ASC" : "DESC"))));
             if($stmt)
             {
 
@@ -243,7 +234,7 @@ class ImageManagerDBM extends DBM
                 $results = $stmt->get_result();
                 
                 //get all of the results in 1 go
-                $return = $results->fetch_all(MYSQLI_NUM);
+                $return = $results->fetch_all(MYSQLI_ASSOC);
 
                 //close the statement
                 $stmt->close();
@@ -282,12 +273,11 @@ class ImageManagerDBM extends DBM
      * Returns all of the rows in the table.  If specified, it will only retrieve the desired columns
      * from each row. It will only return the rows that satisfy the search constraint
      * @param Associative array where the key is the column name and the value is the search constraint
-     * @param type $columns the desired Columns to retrieve from the table.
      * @param type $sortBy Column name to sort by
      * @param type $ascending Sort by true = ascending or false = descending
      * @return Associative Array containing the specified columns of every service requests in the table
      */
-    public function searchAllServiceRequestsWithColumns($constraints = null, $columns = self::ALLCOLUMNS, $sortBy = null, $ascending = false)
+    public function searchAllServiceRequestsWithConstraints($constraints = null, $sortBy = null, $ascending = false)
     {
         //read in all the rows
         $input = $this->getColumnsFromTableWithSearchValues($constraints,$columns, ServiceRequest::$table, $sortBy, $ascending);

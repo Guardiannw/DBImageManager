@@ -43,10 +43,6 @@ switch($action)
     case 'viewRequests':
         //get all of the service requests in the database
         $requests = $databaseManager->getAllServiceRequestsWithColumns(ServiceRequest::getViewColumns());
-        //get the names and id's for the Schools
-        $schoolNames = $databaseManager->getAllSchoolNames();
-        //get the names and id's for all Users
-        $userNames = $databaseManager->getAllUserNames(User::kGETFULLNAME);
         break;
     case 'createRequest':
         //get the names and id's for the Schools
