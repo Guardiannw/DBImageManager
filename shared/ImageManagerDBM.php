@@ -232,7 +232,7 @@ class ImageManagerDBM extends DBM
                     . "Notes, "
                     . "CreationDate, "
                     . "CompletedDate, "
-                    . "HowResolved FROM ServiceRequests" . empty($sortBy) ? "" : " Order BY $sortBy " . $ascending ? "ASC" : "DESC");
+                    . "HowResolved FROM ServiceRequests" . (empty($sortBy) ? null : (" Order BY $sortBy " . ($ascending ? "ASC" : "DESC"))));
             if($stmt)
             {
 

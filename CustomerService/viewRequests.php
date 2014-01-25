@@ -8,7 +8,7 @@ global $requests, $schoolNames, $userNames;
 //format the time for the requests
 formatTimeArray($requests, array(ServiceRequest::$creationdate, ServiceRequest::$completeddate), ServiceRequest::DEFAULTTIMEFORMAT);
 //format the SchoolID's with the school names
-foreach($requests as $key=>$request)
+foreach($requests as $key => $request)
 {
     //re-assign the schoolid field
     //create a simple link to the schoolid
