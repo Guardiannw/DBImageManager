@@ -111,7 +111,7 @@ $contactTypeOpts = ServiceRequest::$CONTACTTYPEOPTIONS;
             </div>
             <div class="row">
                 <h4>The <b>Employee</b> who recorded this request is: </h4>
-                <h4><?php echo $userNames[$rid]; ?></h4>
+                <h4><?php echo $userNames[$rid]['FirstName']; ?></h4>
             </div>
             <div class="row">
                 <h4>This request was created on: </h4>

@@ -127,13 +127,9 @@ switch($action)
         {
             $serviceRequest->completeddate = date(DBO::$MYSQLDATE);
         }
-        else if(empty($sr['CompletedDate']))
+        else if(!empty($sr['CompletedDate'])) // make sure not to set the value if there is no need to.
         {
-            $serviceRequest->completeddate = null;
-        }
-        else
-        {
-            $serviceReqeust->completeddate = $sr['CompletedDate'];
+            $serviceRequest->completeddate = $sr['CompletedDate'];
         }
         
         //update the request
