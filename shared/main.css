@@ -136,6 +136,7 @@ input.columnSearch
     width:100%;
     max-width: 100%;
     box-sizing: border-box;
+    vertical-align: bottom;
 }
 textarea
 {
@@ -174,6 +175,11 @@ thead th
     border: 2px black solid;
     padding: 5px;
     box-sizing: content-box;
+    vertical-align: bottom;
+}
+thead th#Edit
+{
+    vertical-align:middle;
 }
 
 .floatleft

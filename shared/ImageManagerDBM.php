@@ -147,77 +147,17 @@ class ImageManagerDBM extends DBM
     {
         try
         {
-            //prepare the statement
             $stmt = $this->DBO->prepare("SELECT 
-                                            ServiceRequests.ID,
+                                            ServiceRequests.ID AS ID,
                                             Status,
                                             ContactName,
                                             ContactPhone,
                                             ClientName,
                                             Schools.Name AS School,
                                             IssueType,
+                                            Issue,
                                             concat(Users.FirstName,' ', Users.LastName) AS Assignee,
-                                            DATE_FORMAT(CreationDate, '%M %e, %Y') AS CreationDate,
-                                            DATE_FORMAT(CompletedDate, '%M %e, %Y') AS CompletedDate
-                                        FROM
-                                            ServiceRequests
-                                                JOIN
-                                            Schools ON ServiceRequests.SchoolID = Schools.ID
-                                                JOIN
-                                            Users ON Users.ID = ServiceRequests.AssigneeID");
-            if($stmt)
-            {
-
-                //execute the statement
-                $stmt->execute();
-                
-                //bind the result to a variable
-                $results = $stmt->get_result();
-                
-                //get all of the results in 1 go
-                $return = $results->fetch_all(MYSQLI_ASSOC);
-
-                //close the statement
-                $stmt->close();
-                
-                return $return;
-            }
-            else
-            {
-                return null;
-            }
-        }
-        catch(Exception $e)
-        {
-            echo $e->getMessage();
-            return null;
-        }
-    }
-    
-    /**
-     * Returns all of the rows in the table.  If specified, it will only retrieve the desired columns
-     * from each row.
-     * @param type $columns the desired Columns to retrieve from the table.
-     * @param type $sortBy Column name to sort by
-     * @param type $ascending Sort by true = ascending or false = descending
-     * @return Associative Array containing the specified columns of every service requests in the table
-     */
-    public function getAllServiceRequestsWithColumns($columns = self::ALLCOLUMNS, $sortBy = null, $ascending = false)
-    {
-        try
-        {
-            //prepare the statement
-            $stmt = $this->DBO->prepare("SELECT 
-                                            ServiceRequests.ID,
-                                            Status,
-                                            ContactName,
-                                            ContactPhone,
-                                            ClientName,
-                                            Schools.Name AS School,
-                                            IssueType,
-                                            concat(Users.FirstName,' ', Users.LastName) AS Assignee,
-                                            DATE_FORMAT(CreationDate, '%M %e, %Y') AS CreationDate,
-                                            DATE_FORMAT(CompletedDate, '%M %e, %Y') AS CompletedDate
+                                            DATE_FORMAT(CreationDate, '%M %e, %Y') AS CreationDate
                                         FROM
                                             ServiceRequests
                                                 JOIN
@@ -251,22 +191,6 @@ class ImageManagerDBM extends DBM
             echo $e->getMessage();
             return null;
         }
-        
-        //if the ID element exists
-        //make them into assoc arrays and put them in an ID based array and return the sorted array
-        if(array_key_exists(ServiceRequest::$id, $input[0]))
-        {
-            foreach($input as $value)
-            {
-                $output[$value[ServiceRequest::$id]] = $value;
-            }
-            return $output;
-        }
-        else
-        {
-            //otherwise return the array as it was
-            return $input;
-        }
     }
     
     /**
@@ -279,24 +203,94 @@ class ImageManagerDBM extends DBM
      */
     public function searchAllServiceRequestsWithConstraints($constraints = null, $sortBy = null, $ascending = false)
     {
-        //read in all the rows
-        $input = $this->getColumnsFromTableWithSearchValues($constraints,$columns, ServiceRequest::$table, $sortBy, $ascending);
-        $output = array();
-        
-        //if the ID element exists
-        //make them into assoc arrays and put them in an ID based array and return the sorted array
-        if(array_key_exists(ServiceRequest::$id, $input[0]))
+        try
         {
-            foreach($input as $value)
+            $stmt = $this->DBO->prepare("SELECT 
+                                                ServiceRequests.ID AS ID,
+                                                Status,
+                                                ContactName,
+                                                ContactPhone,
+                                                ClientName,
+                                                Schools.Name AS School,
+                                                IssueType,
+                                                Issue,
+                                                concat(Users.FirstName,' ', Users.LastName) AS Assignee,
+                                                DATE_FORMAT(CreationDate, '%M %e, %Y') AS CreationDate
+                                        FROM
+                                                ServiceRequests
+                                                        JOIN
+                                                Schools ON ServiceRequests.SchoolID = Schools.ID
+                                                        JOIN
+                                                Users ON Users.ID = ServiceRequests.AssigneeID
+                                        WHERE
+                                                ServiceRequests.ID LIKE ?
+                                        AND
+                                                coalesce(Status, '') LIKE ?
+                                        AND
+                                                coalesce(ContactName, '') LIKE ?
+                                        AND
+                                                coalesce(ContactPhone, '') LIKE ?
+                                        AND
+                                                coalesce(ClientName, '') LIKE ?
+                                        AND
+                                                coalesce(Schools.Name, '') LIKE ?
+                                        AND
+                                                coalesce(IssueType, '') LIKE ?
+                                        AND
+                                                coalesce(Issue, '') LIKE ?
+                                        AND
+                                                concat(Users.FirstName,' ', Users.LastName) LIKE ?
+                                        AND
+                                                coalesce(DATE_FORMAT(CreationDate, '%M %e, %Y'), '') LIKE ?" . (empty($sortBy) ? null : (" Order BY $sortBy " . ($ascending ? "ASC" : "DESC"))));
+            if($stmt)
             {
-                $output[$value[ServiceRequest::$id]] = $value;
+
+                //set all the constraints that are not set to '%'
+                $constraints['ID'] = isset($constraints['ID']) ? '%'.$constraints['ID'].'%' : '%';
+                $constraints['Status'] = isset($constraints['Status']) ? '%'.$constraints['Status'].'%' : '%';
+                $constraints['ContactName'] = isset($constraints['ContactName']) ? '%'.$constraints['ContactName'].'%' : '%';
+                $constraints['ContactPhone'] = isset($constraints['ContactPhone']) ? '%'.$constraints['ContactPhone'].'%' : '%';
+                $constraints['ClientName'] = isset($constraints['ClientName']) ? '%'.$constraints['ClientName'].'%' : '%';
+                $constraints['School'] = isset($constraints['School']) ? '%'.$constraints['School'].'%' : '%';
+                $constraints['IssueType'] = isset($constraints['IssueType']) ? '%'.$constraints['IssueType'].'%' : '%';
+                $constraints['Issue'] = isset($constraints['Issue']) ? '%'.$constraints['Issue'].'%' : '%';
+                $constraints['Assignee'] = isset($constraints['Assignee']) ? '%'.$constraints['Assignee'].'%' : '%';
+                $constraints['CreationDate'] = isset($constraints['CreationDate']) ? '%'.$constraints['CreationDate'].'%' : '%';
+                        
+                //bind all the search values
+                $stmt->bind_param("ssssssssss",$constraints['ID'],
+                                               $constraints['Status'],
+                                               $constraints['ContactName'],
+                                               $constraints['ContactPhone'],
+                                               $constraints['ClientName'],
+                                               $constraints['School'],
+                                               $constraints['IssueType'],
+                                               $constraints['Issue'],
+                                               $constraints['Assignee'],
+                                               $constraints['CreationDate']);
+                //execute the statement
+                $stmt->execute();
+                
+                //bind the result to a variable
+                $results = $stmt->get_result();
+                
+                //get all of the results in 1 go
+                $return = $results->fetch_all(MYSQLI_ASSOC);
+
+                //close the statement
+                $stmt->close();
+                
+                return $return;
             }
-            return $output;
+            else
+            {
+                return null;
+            }
         }
-        else
+        catch(Exception $e)
         {
-            //otherwise return the array as it was
-            return $input;
+            echo $e->getMessage();
+            return null;
         }
     }
     

@@ -1,7 +1,6 @@
 <?php
 
 //set up error reporting for debugging
-error_reporting(E_ALL);
 
 //include the datamanager and connection to database.
 require_once('connect.php');

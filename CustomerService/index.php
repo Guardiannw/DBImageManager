@@ -1,7 +1,6 @@
 <?php
 
 //set up error reporting for debugging
-error_reporting(E_ALL);
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 //connect to the database and create the $databaseManager object
@@ -42,7 +41,7 @@ switch($action)
 {
     case 'viewRequests':
         //get all of the service requests in the database
-        $requests = $databaseManager->getAllServiceRequestsWithColumns(ServiceRequest::getViewColumns());
+        $requests = $databaseManager->getAllServiceRequests();
         break;
     case 'createRequest':
         //get the names and id's for the Schools
