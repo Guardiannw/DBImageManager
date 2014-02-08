@@ -159,7 +159,7 @@ $headers = array_keys(current($requests));
         });
 
         //add the search on each key stroke in the search inputs
-        $("input[id^='search'").keyup(function()
+        $("input[id^='search']").keyup(function()
         {
             var senddata = {
             "column": selectedSort,
@@ -205,7 +205,7 @@ $headers = array_keys(current($requests));
                         var header = $(column).attr("headers");
 
                         //do something different if the column is the edit column
-                        if(header == "Edit")
+                        if(header === "Edit")
                         {
                             //get the input for the id
                             var input = $(column).find("input[name='id']");

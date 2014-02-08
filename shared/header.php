@@ -28,9 +28,3 @@ and open the template in the editor.
         <script src="/shared/jqueryui/jquery-ui.js" type="text/javascript"></script>
         <script src="/shared/json3/json3.js" type="text/javascript"></script>
     </head>
-<body>
-    <div id="loginStatus">
-        <?php if(isset($user)): ?>
-        <h5>Welcome <?php echo $user->fname; ?>! <a href="/index.php?action=processLogout">Logout</a></h5>
-        <?php endif; ?>
-    </div>

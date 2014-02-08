@@ -139,6 +139,7 @@ switch($action)
 //figure out where to redirect the page
 //include the header
 include_once('../shared/header.php'); //draw the header for all pages
+include_once('../shared/navigationMenu.php'); //draw the menu for all pages
 
 switch($action)
 {

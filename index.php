@@ -63,6 +63,7 @@ switch($action)
 
 //for drawing windows
 include_once('shared/header.php'); //draw the header for all pages
+include_once('shared/navigationMenu.php'); //draw the menu for all pages
 
 switch($action)
 {
@@ -70,7 +71,7 @@ switch($action)
         include_once('mainMenu.php'); //draw the main menu
         break;
     case 'Login':
-        include_once('login.php'); //for the user to log in at the beginning of the session.
+        include_once('home.php'); //for the user to log in at the beginning of the session.
         break;
     case 'Logout':
         include_once('logout.php'); //to inform the user that they have successfully logged out

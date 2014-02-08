@@ -156,7 +156,7 @@ class ImageManagerDBM extends DBM
                                             Schools.Name AS School,
                                             IssueType,
                                             Issue,
-                                            concat(Users.FirstName,' ', Users.LastName) AS Assignee,
+                                            concat(IFNULL(Users.FirstName, ''),' ', IFNULL(Users.LastName, '')) AS Assignee,
                                             DATE_FORMAT(CreationDate, '%M %e, %Y') AS CreationDate
                                         FROM
                                             ServiceRequests
@@ -214,7 +214,7 @@ class ImageManagerDBM extends DBM
                                                 Schools.Name AS School,
                                                 IssueType,
                                                 Issue,
-                                                concat(Users.FirstName,' ', Users.LastName) AS Assignee,
+                                                concat(IFNULL(Users.FirstName, ''),' ', IFNULL(Users.LastName, '')) AS Assignee,
                                                 DATE_FORMAT(CreationDate, '%M %e, %Y') AS CreationDate
                                         FROM
                                                 ServiceRequests
@@ -239,7 +239,7 @@ class ImageManagerDBM extends DBM
                                         AND
                                                 coalesce(Issue, '') LIKE ?
                                         AND
-                                                concat(Users.FirstName,' ', Users.LastName) LIKE ?
+                                                concat(IFNULL(Users.FirstName, ''),' ', IFNULL(Users.LastName, '')) LIKE ?
                                         AND
                                                 coalesce(DATE_FORMAT(CreationDate, '%M %e, %Y'), '') LIKE ?" . (empty($sortBy) ? null : (" Order BY $sortBy " . ($ascending ? "ASC" : "DESC"))));
             if($stmt)

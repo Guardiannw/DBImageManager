@@ -9,39 +9,115 @@ and open the template in the editor.
 */
 
 body{
-    background-color:#fefbe2;
+    background-color:snow;
     color: #000000;
     position:relative;
+    margin: 0px;
 }
 div.table
 {
     display: inline-table;
 }
-/* For Login Page */
-#loginBox
+
+/* Header Menu */
+#navigationMenu
+{
+    font-family: Helvetica;
+    color: #d1d1d1;
+    display: table;
+    margin-bottom: 5px;
+    width: 100%;
+    min-height: 35px;
+    max-height: 35px;
+    background: #0095bf; /* Old browsers */
+    background: -moz-linear-gradient(top, #0095bf 0%, #005d7a 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#0095bf), color-stop(100%,#005d7a)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #0095bf 0%,#005d7a 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #0095bf 0%,#005d7a 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #0095bf 0%,#005d7a 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #0095bf 0%,#005d7a 100%); /* W3C */
+}
+
+#navigationMenu > *
+{
+    display: table-cell;
+    font-size: 0; /* To remove whitespace between inlinel elements */
+}
+
+#navigationMenu > #navigationTitle
 {
     text-align: center;
-    display: block;
-    margin: auto;
+    height: 100%;
+    vertical-align: middle;
 }
+#navigationMenu > #navigationLocations
+{
+    text-align: left;
+    height: 100%;
+    vertical-align: middle;
+}
+
+#navigationMenu .option, #login #submit
+{
+    display: inline-block;
+    padding: 5px 10px 5px;
+    font-size: 12pt;
+    background: none;
+    height: 100%;
+    border: none;
+    color: inherit;
+    margin: 0px;
+}
+
+#navigationMenu .option.button:hover, #login #submit:hover
+{
+    cursor: pointer;
+    background: #0095bf; /* Old browsers */
+    background: -moz-linear-gradient(top, #0095bf 0%, #005d7a 50%, #005d7a 50%, #0095bf 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#0095bf), color-stop(50%,#005d7a), color-stop(50%,#005d7a), color-stop(100%,#0095bf)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #0095bf 0%,#005d7a 50%,#005d7a 50%,#0095bf 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #0095bf 0%,#005d7a 50%,#005d7a 50%,#0095bf 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #0095bf 0%,#005d7a 50%,#005d7a 50%,#0095bf 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #0095bf 0%,#005d7a 50%,#005d7a 50%,#0095bf 100%); /* W3C */
+
+}
+#navigationLocations .option:not(:last-child)
+{
+    border-right: 2px #000 solid;
+}
+
+#navigationMenu > #navigationSettings
+{
+    text-align: right;
+}
+
+#navigationSettings .option:not(:last-child)
+{
+    border-right: 2px #000 solid;
+}
+
+/* For Login Page */
 #login
 {
     text-align: center;
     display: inline-block;
-    border: 2px #000000 inset;
-    border-radius: 20px;
-    min-height: 100px;
-    padding: 15px;
-    max-width: 800px;
 }
 .row
 {
     display: table-row;
 }
+#login .row
+{
+    display: inline-block;
+}
 .row > *
 {
     display: table-cell;
-    vertical-align:central;
+    vertical-align: central;
+}
+#login .row > *
+{
+    display: inline-block;
 }
 .row > *:first-child
 {
@@ -51,17 +127,16 @@ div.table
 {
     text-align: left;
 }
+#login .row > *:last-child
+{
+    width: 80px;
+}
 
 input#PercentComplete
 {
     width: auto;
 }
-#login #submit
-{
-    display: inline-block;
-    padding: auto;
-    margin: 5px;
-}
+
 #menu
 {
     text-align: center;
@@ -145,7 +220,7 @@ textarea
 table#viewRequests
 {
     border-collapse: collapse;
-    table-layout:fixed;
+    border: 2px #dae3fd solid;
 }
 table#viewRequests th > *:not(input)
 {
@@ -153,33 +228,45 @@ table#viewRequests th > *:not(input)
 }
 table#viewRequests td
 {
-    border: 2px black solid;
-    padding: 5px;
+    padding: 2px;
     width: auto;
-    height: auto;
+}
+table#viewRequests tr:nth-child(even)
+{
+    background-color: #dae3fd;
 }
 table#viewRequests tbody tr:hover
 {
     background-color:#785eec;
-    cursor:pointer;
+    cursor: pointer;
+    height: auto;
+}
+
+table#viewRequests tbody tr input:hover
+{
+    cursor: pointer;
+}
+table#viewRequests tr td:last-child
+{
+    text-align: center;
 }
 
 thead
 {
-    border: 2px black solid;
     text-align: center;
     color: #000000;
+    background-color: #a4beff;
 }
 thead th
 {
-    border: 2px black solid;
+    border: 2px #dae3fd solid;
     padding: 5px;
-    box-sizing: content-box;
     vertical-align: bottom;
+    white-space: nowrap;
 }
 thead th#Edit
 {
-    vertical-align:middle;
+    vertical-align:top;
 }
 
 .floatleft
