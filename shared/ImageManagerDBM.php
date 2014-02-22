@@ -205,6 +205,12 @@ class ImageManagerDBM extends DBM
     {
         try
         {
+	    // If the sortBy contains a date, we have to specify that it should sort by the date and not the sorted string.
+            if($sortBy === 'CreationDate')
+	    {
+		$sortBy = 'ServiceRequests.CreationDate';
+	    }
+
             $stmt = $this->DBO->prepare("SELECT 
                                                 ServiceRequests.ID AS ID,
                                                 Status,

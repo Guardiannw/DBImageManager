@@ -17,6 +17,9 @@ $headers = array_keys(current($requests));
     selectedSort = "<?php echo ServiceRequest::$id; ?>";
     ascending = true;
     selectedImage = null;
+    
+    // The searching options
+    completedVisible = true;
 
 
     function getSearchBoxData()
@@ -35,6 +38,23 @@ $headers = array_keys(current($requests));
         return data;
     }
 
+    function setCompletedVisibility()
+    {
+	$("tbody > tr").each(function()
+        {
+	    // Get the status column
+	    var statusText = $(this).children("td[headers='Status']").html();
+            // Reset each of the rows to visible
+            $(this).show();
+	    if(statusText.match("Completed/Resolved") != null || statusText.match("Completed/Unresolved") != null)
+	    {
+		if(!completedVisible)
+                {
+                    $(this).hide();
+                }
+	    }
+	});
+    }
     //only execute this when the document has been loaded
     $(document).ready(function()
     {
@@ -154,7 +174,9 @@ $headers = array_keys(current($requests));
                 //remove all of the other rows from the table
                 var dataLength = $(data).length;
                 $("tbody > tr:gt(" + dataLength + "),tbody > tr:eq(" + dataLength + ")").remove();
-
+                
+                // Set the current visibility again
+                setCompletedVisibility();
             });
         });
 
@@ -238,7 +260,9 @@ $headers = array_keys(current($requests));
                 //remove all of the other rows from the table
                 var dataLength = $(data).length;
                 $("tbody > tr:gt(" + dataLength + "),tbody > tr:eq(" + dataLength + ")").remove();
-
+                
+                // Set the current visibility again
+                setCompletedVisibility();
             });
         });
 
@@ -270,6 +294,11 @@ $headers = array_keys(current($requests));
     });
 </script>
 
+<!-- Options -->
+<form id="viewOptions">
+    <input type="checkBox" onclick="completedVisible = !completedVisible; setCompletedVisibility();" id="completedRequestToggle">
+    <label for="completedRequestToggle">Hide Completed Requests</label>
+</form>
 <form id="columnSearchForm">
     <table id="viewRequests">
         <thead id="head">
