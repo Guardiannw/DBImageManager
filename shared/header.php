@@ -21,10 +21,27 @@ and open the template in the editor.
     <head>
         <meta charset="UTF-8">
         <title>Moore Studio Image Framework</title>
-        <link rel="stylesheet" href="/shared/main.css" type="text/css">
+        <link id="mainStylesheet" rel="stylesheet" href="/shared/main.css" type="text/css">
         <link rel="stylesheet" href="/shared/jqueryui/css/base/jquery-ui.css">
         <script src="/shared/functions.js" type="text/javascript"></script>
         <script src="/shared/jquery/jquery.js" type="text/javascript"></script>
         <script src="/shared/jqueryui/jquery-ui.js" type="text/javascript"></script>
         <script src="/shared/json3/json3.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            $(function()
+            {
+                //display the drop down on click
+                $(".dropdown").click(function()
+                {
+                    if($(this).hasClass("hovered"))
+                    {
+                        $(this).removeClass("hovered");
+                    }
+                    else
+                    {
+                        $(this).addClass("hovered");
+                    }
+                });
+            });
+        </script>
     </head>

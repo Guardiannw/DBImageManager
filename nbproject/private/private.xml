@@ -5,10 +5,10 @@
         <group>
             <file>file:/var/www/MooreStudioProject/shared/navigationMenu.php</file>
             <file>file:/var/www/MooreStudioProject/shared/main.css</file>
-            <file>file:/var/www/MooreStudioProject/api/index.php</file>
             <file>file:/var/www/MooreStudioProject/index.php</file>
+            <file>file:/var/www/MooreStudioProject/CustomerService/viewRequests.php</file>
             <file>file:/var/www/MooreStudioProject/shared/header.php</file>
-            <file>file:/var/www/MooreStudioProject/home.php</file>
+            <file>file:/var/www/MooreStudioProject/CustomerService/menu.php</file>
             <file>file:/var/www/MooreStudioProject/CustomerService/index.php</file>
         </group>
     </open-files>

@@ -7,24 +7,32 @@
     <div id="navigationMenu">
         <div id="navigationLocations">
             <div class="option button" onclick="document.location='/index.php'">
-                Home
+                <h1>Home</h1>
             </div>
-            <div class="option button" onclick="document.location='/CustomerService/index.php'">
-                Customer Service
+            <div class="dropdown">
+                <div class="option">
+                    <h1>Customer Service</h1>
+                </div>
+                <div class="menuitem button" onclick="document.location='/CustomerService/index.php?action=createRequest';">
+                    <h1>Add New</h1>
+                </div>
+                <div class="menuitem button" onclick="document.location='/CustomerService/index.php?action=viewRequests';">
+                    <h1>View Requests</h1>
+                </div>
             </div>
         </div>
         <div id="navigationTitle">
             <div class="option">
-            Moore Studio School Division
+                <h1>Moore Studio School Division</h1>
             </div>
         </div>
         <div id="navigationSettings">
             <?php if(isset($user)): ?>
                 <div class="option">
-                    Welcome, <?php echo $user->fname; ?>
+                    <h1>Welcome, <?php echo $user->fname; ?></h1>
                 </div>
                 <div class="option button" onclick="document.location='/index.php?action=processLogout';">
-                    Logout
+                    <h1>Logout</h1>
                 </div>
             <?php else: ?>
                 <form id="login" method="POST" action="?action=processLogin">
@@ -39,7 +47,7 @@
                         </div>
                     </div>
                     <button class="option button" type="submit" id="submit">
-                        Login
+                        <h1>Login</h1>
                     </button>
                 </form>
             <?php endif; ?>
